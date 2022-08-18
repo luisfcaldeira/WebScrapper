@@ -21,7 +21,6 @@ namespace ConsoleApp.WebScrapper
             var dados = repository.GetAll();
 
             HtmlWeb web = new HtmlWeb();
-            var htmlNewDoc = new HtmlDocument();
             HtmlDocument doc = web.Load("https://www.folha.uol.com.br/");
             
             //var headerNames = doc.DocumentNode.SelectNodes("//span[@class='toctext']");
