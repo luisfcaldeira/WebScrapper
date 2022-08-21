@@ -9,8 +9,4 @@
     <ProjectReference Include="..\Infra.Databases\Crawler.Infra.Databases.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
 </Project>

@@ -1,6 +1,17 @@
 ﻿using Crawler.Infra.Databases.Context;
+using Crawler.Infra.Databases.DAL;
 using Crawler.Infra.Databases.DAL.Repositories;
+using Crawlers.Application.Interfaces.Services;
+using Crawlers.Application.Services;
+using Crawlers.Domain.Entities.ObjectValues.Urls;
+using Crawlers.Domain.Interfaces.DAL;
+using Crawlers.Domain.Interfaces.DAL.Repositories;
+using Crawlers.Domain.Interfaces.Services.WebCrawlerServices;
+using Crawlers.Infra.WebScrapperServices.Services;
 using HtmlAgilityPack;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,21 +27,45 @@ namespace ConsoleApp.WebScrapper
         public static void Main()
         {
             Console.WriteLine("Hello World");
+            using IHost host = Host.CreateDefaultBuilder()
+            .ConfigureServices((_, services) => 
+                services.AddTransient<IUrlRepository, UrlRepository>()
+                .AddTransient<DbContext>(provider => new CrawlerDbContext(@"Server=(localdb)\mssqllocaldb;Database=Test"))
+                .AddTransient<IWebCrawlerFolhaAppService, WebCrawlerFolhaAppService>()
+                .AddTransient<IFolhaWebCrawlerService, FolhaWebCrawlerService>()
+                .AddTransient((provider) => new HtmlWeb())
+                .AddTransient<IUnitOfWork, UnitOfWork>())
+            .Build();
 
-            var repository = new UrlRepository(new CrawlerDbContext(@"Server=(localdb)\mssqllocaldb;Database=Test"));
-            var dados = repository.GetAll();
+            IServiceProvider services = host.Services;
 
-            HtmlWeb web = new HtmlWeb();
-            HtmlDocument doc = web.Load("https://www.folha.uol.com.br/");
+            var unitOfWork = services.GetRequiredService<IUnitOfWork>();
+
+            var url = "https://www1.folha.uol.com.br/poder/2022/08/lula-informa-ao-tse-ter-criado-redes-sociais-direcionadas-a-evangelicos.shtml";
             
-            //var headerNames = doc.DocumentNode.SelectNodes("//span[@class='toctext']");
-            var title = doc.DocumentNode.SelectNodes("//head/title").First();
-            // https://docs.microsoft.com/en-us/dotnet/api/system.text.encoding.getencodings?view=net-6.0#system-text-encoding-getencodings
-            byte[] bytes = Encoding.GetEncoding("iso-8859-1").GetBytes(title.InnerText);
-            var nameFixed = Encoding.UTF8.GetString(bytes);
+            if(unitOfWork.UrlRepository.GetUrl(url) == null)
+            {
+                unitOfWork.UrlRepository.Add(new Url(url));
+                unitOfWork.Save();
+                
+            }
 
-            Console.WriteLine(nameFixed);
-            Console.ReadKey();
+
+            Execute(services);
+
+            host.RunAsync();
+
+            Console.ReadLine();
+        }
+
+        static void Execute(IServiceProvider services)
+        {
+            using IServiceScope serviceScope = services.CreateScope();
+            IServiceProvider provider = serviceScope.ServiceProvider;
+
+            var crawler = provider.GetRequiredService<IWebCrawlerFolhaAppService>();
+            crawler.Scrap();
+
         }
     }
 }

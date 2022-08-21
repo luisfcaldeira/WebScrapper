@@ -6,6 +6,7 @@
         public UrlProtocol Protocol { get; private set; }
         public UrlDomain Domain { get; private set; }
         public string Value { get; private set; }
+        public bool IsVisited { get; set; } = false;
 
         protected Url()
         {

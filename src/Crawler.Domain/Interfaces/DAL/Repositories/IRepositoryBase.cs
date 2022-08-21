@@ -1,6 +1,6 @@
 ﻿namespace Crawlers.Domain.Interfaces.DAL.Repositories
 {
-    public interface IRepositoryBase<T>
+    public interface IRepositoryBase<T> : IDisposable
     {
         public T GetById(object id);
         public IEnumerable<T> GetAll();

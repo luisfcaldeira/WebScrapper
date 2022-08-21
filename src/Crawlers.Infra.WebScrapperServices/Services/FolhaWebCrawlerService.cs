@@ -15,7 +15,8 @@ namespace Crawlers.Infra.WebScrapperServices.Services
         public override string GetContent(Url url)
         {
             var doc = GetDocument(url);
-            var divs = doc.DocumentNode.SelectNodes("//body/div");
+            var divs = doc.DocumentNode.SelectNodes("//div");
+
             var nodes = divs.Where(d => d.HasClass("c-news__body")).ToList();
             var result = new StringBuilder();
             
@@ -24,7 +25,7 @@ namespace Crawlers.Infra.WebScrapperServices.Services
                 result.Append(node.InnerText);  
             }
 
-            return result.ToString();
+            return Decode(result.ToString());
         }
 
         public DateTime? GetPublishDate(Url url)
