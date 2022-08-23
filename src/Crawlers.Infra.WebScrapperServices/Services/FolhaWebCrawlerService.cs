@@ -38,7 +38,7 @@ namespace Crawlers.Infra.WebScrapperServices.Services
 
         public override FolhaArticle GetEntity(Url url)
         {
-            return new FolhaArticle(GetTitle(url), GetContent(url), GetPublishDate(url));
+            return new FolhaArticle(GetTitle(url), GetContent(url), url, GetPublishDate(url), GetAnchors(url));
         }
     }
 }

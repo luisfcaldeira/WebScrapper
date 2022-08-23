@@ -5,6 +5,7 @@
         public int Id { get; set; }
         public UrlProtocol Protocol { get; private set; }
         public UrlDomain Domain { get; private set; }
+        public UrlDirectory Directory { get; private set; }
         public string Value { get; private set; }
         public bool IsVisited { get; set; } = false;
 
@@ -17,7 +18,13 @@
         {
             Domain = new UrlDomain(url);
             Protocol = new UrlProtocol(url);
+            Directory = new UrlDirectory(url);
             Value = url;
+        }
+
+        internal bool IsValid(UrlDomain domain)
+        {
+            return Domain == domain;    
         }
     }
 }

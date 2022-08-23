@@ -1,8 +1,10 @@
-﻿namespace Crawlers.Domain.Entities.Articles
+﻿using Crawlers.Domain.Entities.ObjectValues.Urls;
+
+namespace Crawlers.Domain.Entities.Articles
 {
     public class FolhaArticle : BaseArticle
     {
-        public FolhaArticle(string title, string content, DateTime? publish) : base(title, content, publish)
+        public FolhaArticle(string title, string content, Url url, DateTime? published, IList<Url> urls) : base(title, content, url, published, urls)
         {
         }
     }

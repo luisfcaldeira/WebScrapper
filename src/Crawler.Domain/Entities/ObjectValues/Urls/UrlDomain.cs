@@ -4,8 +4,9 @@ namespace Crawlers.Domain.Entities.ObjectValues.Urls
 {
     public class UrlDomain
     {
-        private const string RegexPattern = @"(?:http\:\/\/|https\:\/\/)?((?:[\w\d\-]{2,}\.)(?:[\w\d\-]{2,}\.?)(?:[\w\d\-]{2,}\.?)?(?:[\w\d\-]{2,}\.?)?(?:[\w\d\-]{2,}\.?)?(?:[\w\d\-]{2,}\.?)?(?:[\w\d\-]{2,}\.?)?)\/?[^\s]*";
+        public const string RegexPattern = @"(?<domain>[^.]*\.[^.]{2,3}(?:\.[^.]{2,3})?$)";
         public string Value { get; private set; } = "";
+        public string[] Parts { get; private set; } 
 
         protected UrlDomain()
         {
@@ -19,17 +20,33 @@ namespace Crawlers.Domain.Entities.ObjectValues.Urls
 
         private void Extract(string url)
         {
+            var cleanedString = Clean(url);
             var regex = new Regex(RegexPattern);
-            if (regex.IsMatch(url))
+            if (regex.IsMatch(cleanedString))
             {
-                var groups = regex.Match(url).Groups;
-                Value = RemoveTripleW(groups[1].Value);
+                var groups = regex.Match(cleanedString).Groups;
+                Value = groups["domain"].Value;
+                Parts = Value.Split('.');
             }
         }
 
-        private string RemoveTripleW(string value)
+        private string Clean(string url)
         {
-            return Regex.Replace(value, @"^[w]{3}\.", "");
+            url = Regex.Replace(url, @"([htps]{4,5})\:\/\/([w]{3}\.)?", "");
+            var urls = url.Split("/");
+
+            return urls[0];
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is UrlDomain domain &&
+                   Value == domain.Value;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Value);
         }
     }
 }

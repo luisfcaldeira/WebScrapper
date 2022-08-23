@@ -18,7 +18,7 @@ namespace Crawlers.Infra.WebScrapperServices.Services
         public IList<Url> GetAnchors(Url url)
         {
             HtmlDocument doc = GetDocument(url);
-            var anchors = doc.DocumentNode.SelectNodes("//body/a");
+            var anchors = doc.DocumentNode.SelectNodes("//a");
             var result = new List<Url>();
             foreach (var anchor in anchors)
             {

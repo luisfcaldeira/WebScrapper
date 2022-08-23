@@ -26,7 +26,7 @@ namespace ConsoleApp.WebScrapper
     {
         public static void Main()
         {
-            Console.WriteLine("Hello World");
+
             using IHost host = Host.CreateDefaultBuilder()
             .ConfigureServices((_, services) => 
                 services.AddTransient<IUrlRepository, UrlRepository>()
@@ -40,7 +40,6 @@ namespace ConsoleApp.WebScrapper
             IServiceProvider services = host.Services;
 
             var unitOfWork = services.GetRequiredService<IUnitOfWork>();
-
             var url = "https://www1.folha.uol.com.br/poder/2022/08/lula-informa-ao-tse-ter-criado-redes-sociais-direcionadas-a-evangelicos.shtml";
             
             if(unitOfWork.UrlRepository.GetUrl(url) == null)
@@ -49,7 +48,6 @@ namespace ConsoleApp.WebScrapper
                 unitOfWork.Save();
                 
             }
-
 
             Execute(services);
 
