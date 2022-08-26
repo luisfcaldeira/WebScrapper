@@ -7,6 +7,11 @@ namespace Crawlers.Domain.Entities.ObjectValues.Urls
         private const string RegexPattern = @"\/(?<directory>[^\/]+)";
         public string Value { get; set; }
 
+        protected UrlDirectory()
+        {
+
+        }
+
         public UrlDirectory(string url)
         {
             Extract(url);

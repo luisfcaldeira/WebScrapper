@@ -6,16 +6,16 @@ namespace Crawlers.Domain.Entities.ObjectValues.Urls
     {
         public const string RegexPattern = @"(?<domain>[^.]*\.[^.]{2,3}(?:\.[^.]{2,3})?$)";
         public string Value { get; private set; } = "";
-        public string[] Parts { get; private set; } 
+        public string[] Parts { get; private set; }
 
         protected UrlDomain()
         {
 
         }
 
-        public UrlDomain(string url)
+        public UrlDomain(string value)
         {
-            Extract(url);
+            Extract(value);
         }
 
         private void Extract(string url)

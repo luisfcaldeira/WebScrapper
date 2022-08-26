@@ -8,7 +8,11 @@ namespace Crawler.Infra.Databases.Configs.Urls
     {
         public void Configure(EntityTypeBuilder<Url> builder)
         {
-            builder.OwnsOne(url => url.Domain);
+            builder.OwnsOne(url => url.Directory);
+            builder.OwnsOne(url => url.Domain, u =>
+            {
+                u.Ignore(i => i.Parts);
+            });
             builder.OwnsOne(url => url.Protocol);
         }
     }

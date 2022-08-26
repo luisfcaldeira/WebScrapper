@@ -1,4 +1,5 @@
 using Crawlers.Domain.Entities.ObjectValues.Urls;
+using Crawlers.Domain.Entities.ObjectValues.Urls.ChainOfResponsability;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 
@@ -10,14 +11,26 @@ namespace Tests.Crawler.Domain.Entities.ObjectValues
         [TestMethod]
         public void TestIfUrlDomainIsWellFormed()
         {
-            var domain = new UrlDomain("www.domain.com");
-            Assert.AreEqual("domain.com", domain.Value);
+            var twoElements = new TwoElementsUrl();
+            var withSubdomain = new WithSubdomainUrl();
+            var withCountry = new WithCountryUrl();
+            var withError = new NotWellFormedUrl();
 
-            var domain2 = new UrlDomain("http://www.domain.com.br");
-            Assert.AreEqual("domain.com.br", domain2.Value);            
+            twoElements
+                .SetNext(withSubdomain)
+                .SetNext(withCountry)
+                .SetNext(withError);
+
+            var client = new UrlClient(twoElements);
+
+            var url = client.Handle("domain.com");
+            Assert.AreEqual("domain.com", url.Domain.Value);
+
+            var url2 = client.Handle("http://www.domain.com.br");
+            Assert.AreEqual("domain.com.br", url2.Domain.Value);            
             
-            var domain3 = new UrlDomain("http://www.domain.com.br/index.html?variable1=999&variable2=abcd");
-            Assert.AreEqual("domain.com.br", domain3.Value);
+            var url3 = client.Handle("http://www.domain.com.br/index.html?variable1=999&variable2=abcd");
+            Assert.AreEqual("domain.com.br", url3.Domain.Value);
         }
 
         [TestMethod]
@@ -74,15 +87,15 @@ namespace Tests.Crawler.Domain.Entities.ObjectValues
             Assert.IsFalse(domains.Contains(falseUrl.Domain));
         }
 
-        [TestMethod]
-        public void TestIfPartsFromUrlAreCorrect()
-        {
-            var url = new Url("http://www.domain.com.br");
-            Assert.AreEqual(3, url.Domain.Parts.Length);
-            Assert.AreEqual("domain", url.Domain.Parts[0]);
-            Assert.AreEqual("com", url.Domain.Parts[1]);
-            Assert.AreEqual("br", url.Domain.Parts[2]);
-        }
+        //[TestMethod]
+        //public void TestIfPartsFromUrlAreCorrect()
+        //{
+        //    var url = new Url("http://www.domain.com.br");
+        //    Assert.AreEqual(3, url.Domain.Parts.Length);
+        //    Assert.AreEqual("domain", url.Domain.Parts[0]);
+        //    Assert.AreEqual("com", url.Domain.Parts[1]);
+        //    Assert.AreEqual("br", url.Domain.Parts[2]);
+        //}
 
     }
 }
