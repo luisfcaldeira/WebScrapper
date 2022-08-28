@@ -1,6 +1,6 @@
-﻿using Crawlers.Domain.Interfaces.DAL.Repositories;
+﻿using Crawlers.Domains.Interfaces.DAL.Repositories;
 
-namespace Crawlers.Domain.Interfaces.DAL
+namespace Crawlers.Domains.Interfaces.DAL
 {
     public interface IUnitOfWork : IDisposable
     {

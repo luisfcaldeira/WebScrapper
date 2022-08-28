@@ -1,6 +1,6 @@
-﻿using Crawlers.Domain.Entities.ObjectValues.Urls;
+﻿using Crawlers.Domains.Entities.ObjectValues.Urls;
 
-namespace Crawlers.Domain.Entities.Articles
+namespace Crawlers.Domains.Entities.Articles
 {
     public abstract class BaseArticle
     {
@@ -24,7 +24,7 @@ namespace Crawlers.Domain.Entities.Articles
             Urls = urls;
         }
 
-        public IEnumerable<Url>? GetValidUrls(UrlDomain domain)
+        public IEnumerable<Url>? GetValidUrls(ObjectValues.Urls.Domain domain)
         {
             return Urls?.Where(url => url.IsValid(domain)).ToList();
         }

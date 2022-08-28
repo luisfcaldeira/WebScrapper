@@ -1,5 +1,5 @@
 ﻿using Crawler.Infra.Databases.Configs.Urls;
-using Crawlers.Domain.Entities.ObjectValues.Urls;
+using Crawlers.Domains.Entities.ObjectValues.Urls;
 using Microsoft.EntityFrameworkCore;
 
 namespace Crawler.Infra.Databases.Context

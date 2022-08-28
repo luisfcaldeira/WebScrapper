@@ -1,4 +1,4 @@
-﻿namespace Crawlers.Domain.Interfaces.DAL.Repositories
+﻿namespace Crawlers.Domains.Interfaces.DAL.Repositories
 {
     public interface IRepositoryBase<T> : IDisposable
     {

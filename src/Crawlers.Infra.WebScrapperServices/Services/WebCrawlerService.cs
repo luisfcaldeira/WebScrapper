@@ -1,5 +1,5 @@
-﻿using Crawlers.Domain.Entities.ObjectValues.Urls;
-using Crawlers.Domain.Interfaces.Services.WebCrawlerServices;
+﻿using Crawlers.Domains.Entities.ObjectValues.Urls;
+using Crawlers.Domains.Interfaces.Services.WebCrawlerServices;
 using HtmlAgilityPack;
 using System.Text;
 
@@ -24,7 +24,7 @@ namespace Crawlers.Infra.WebScrapperServices.Services
             {
                 try
                 {
-                    result.Add(new Url(anchor.GetAttributeValue("href", "")));
+                    result.Add(UrlCreator.Create(anchor.GetAttributeValue("href", "")));
                 }
                 catch (Exception ex)
                 {

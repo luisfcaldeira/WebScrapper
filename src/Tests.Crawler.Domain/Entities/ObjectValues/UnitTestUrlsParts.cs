@@ -1,36 +1,63 @@
-using Crawlers.Domain.Entities.ObjectValues.Urls;
-using Crawlers.Domain.Entities.ObjectValues.Urls.ChainOfResponsability;
+using Crawlers.Domains.Entities.ObjectValues.Urls;
+using Crawlers.Domains.Entities.ObjectValues.Urls.ChainOfResponsability;
+using Crawlers.Domains.Exceptions.Urls;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
 
-namespace Tests.Crawler.Domain.Entities.ObjectValues
+namespace Tests.Crawler.Domains.Entities.ObjectValues
 {
     [TestClass]
     public class UnitTestUrlsParts
     {
+
+        [TestMethod]
+        public void TestFolhasUrl()
+        {
+            var urlStr = "https://www1.folha.uol.com.br/poder/2022/08/lula-informa-ao-tse-ter-criado-redes-sociais-direcionadas-a-evangelicos.shtml";
+            var url = UrlCreator.Create(urlStr);
+
+            Assert.AreEqual("folha.uol", url.Domain.Name);
+            Assert.AreEqual("www1", url.Domain.Subdomain.Value);
+        }
+
+
+        [TestMethod]
+        public void TestGloboG1Url()
+        {
+            var urlStr = "https://g1.globo.com/pop-arte/noticia/2022/08/27/finalista-do-miss-inglaterra-se-torna-primeira-a-disputar-concurso-sem-maquiagem.ghtml";
+            var url = UrlCreator.Create(urlStr);
+
+            Assert.AreEqual("globo", url.Domain.Name);
+            Assert.AreEqual("g1", url.Domain.Subdomain.Value);
+            Assert.AreEqual("com", url.Domain.TopLevel);
+        }
+
+
+        [TestMethod]
+        public void TestDirectory()
+        {
+            var urlStr = "https://g1.globo.com/pop-arte/noticia/2022/08/27/finalista-do-miss-inglaterra-se-torna-primeira-a-disputar-concurso-sem-maquiagem.ghtml";
+            var url = UrlCreator.Create(urlStr);
+
+            Assert.AreEqual("pop-arte/noticia/2022/08/27/finalista-do-miss-inglaterra-se-torna-primeira-a-disputar-concurso-sem-maquiagem.ghtml", url.Domain.Directory.Value);
+        }
+
         [TestMethod]
         public void TestIfUrlDomainIsWellFormed()
         {
-            var twoElements = new TwoElementsUrl();
-            var withSubdomain = new WithSubdomainUrl();
-            var withCountry = new WithCountryUrl();
-            var withError = new NotWellFormedUrl();
-
-            twoElements
-                .SetNext(withSubdomain)
-                .SetNext(withCountry)
-                .SetNext(withError);
-
-            var client = new UrlClient(twoElements);
-
-            var url = client.Handle("domain.com");
-            Assert.AreEqual("domain.com", url.Domain.Value);
-
-            var url2 = client.Handle("http://www.domain.com.br");
-            Assert.AreEqual("domain.com.br", url2.Domain.Value);            
             
-            var url3 = client.Handle("http://www.domain.com.br/index.html?variable1=999&variable2=abcd");
-            Assert.AreEqual("domain.com.br", url3.Domain.Value);
+
+            var url = UrlCreator.Create("domain.com");
+            Assert.AreEqual("domain", url.Domain.Name);
+
+            var url2 = UrlCreator.Create("http://www.domain.com.br");
+            Assert.AreEqual("domain", url2.Domain.Name);            
+            
+            var url3 = UrlCreator.Create("http://www.domain.com.br/index.html?variable1=999&variable2=abcd");
+            Assert.AreEqual("domain", url3.Domain.Name);
+
+            Assert.ThrowsException<NotWellFormedUrlException>(() => {
+                var url3 = UrlCreator.Create("www notwellformed.url");
+            });
         }
 
         [TestMethod]
@@ -38,11 +65,11 @@ namespace Tests.Crawler.Domain.Entities.ObjectValues
         {
             var expectedResult = "http";
 
-            var protocol1 = new UrlProtocol("http://www.domain.com.br/index.html?variable1=999&variable2=abcd");
+            var protocol1 = new Protocol("http://www.domain.com.br/index.html?variable1=999&variable2=abcd");
             
             Assert.AreEqual(expectedResult, protocol1.Value);
 
-            var protocol2 = new UrlProtocol("https://www.domain.com.br/index.html?variable1=999&variable2=abcd");
+            var protocol2 = new Protocol("https://www.domain.com.br/index.html?variable1=999&variable2=abcd");
 
             Assert.AreEqual("https", protocol2.Value);
         }
@@ -50,52 +77,27 @@ namespace Tests.Crawler.Domain.Entities.ObjectValues
         [TestMethod]
         public void TestIfUrlDomainIsEqualsOthers()
         {
-            var domain1 = new UrlDomain("http://domain.com");
-            var domain2 = new UrlDomain("https://domain.com");
-            var domain3 = new UrlDomain("https://www.domain.com");
-            var domain4 = new UrlDomain("http://www.domain.com");
-            var domain5 = new UrlDomain("http://www.domain.com.br");
-            var domain6 = new UrlDomain("http://another.domain.com");
-            var domain7 = new UrlDomain("http://uglydomain.com");
+            var domain1 = new Domain("domain", "com") 
+            {
+                Country = new Country("br"),
+                Protocol = new Protocol("http://")
+            };
+
+            var domain2 = new Domain("domain", "com")
+            {
+                Country = new Country("br"),
+                Protocol = new Protocol("https://")
+            };
 
             Assert.AreEqual(domain1, domain2);
-            Assert.AreEqual(domain1, domain3);
-            Assert.AreEqual(domain1, domain4);
-            Assert.AreNotEqual(domain1, domain5);
-            Assert.AreEqual(domain1, domain6);
-            Assert.AreNotEqual(domain1, domain7);
         }
 
         [TestMethod]
-        public void TestIfDomainIsInList()
+        public void TestIfCountryIsRight()
         {
-            var domains = new List<UrlDomain>()
-            {
-                new UrlDomain("http://domain.com"),
-                new UrlDomain("https://domain.com"),
-                new UrlDomain("https://www.domain.com"),
-                new UrlDomain("http://www.domain.com"),
-                new UrlDomain("http://another.domain.com"),
-            };
+            var country = new Country("xyz");
 
-            var url = new Url("https://domain.com/index.html?param1=1&param2=lorem%20ipsum");
-            var anotherUrl = new Url("https://another.domain.com/index.html?param1=1&param2=lorem%20ipsum");
-            var falseUrl = new Url("https://false.notdomain.com/index.html?param1=1&param2=lorem%20ipsum");
-
-            Assert.IsTrue(domains.Contains(anotherUrl.Domain));
-            Assert.IsTrue(domains.Contains(url.Domain));
-            Assert.IsFalse(domains.Contains(falseUrl.Domain));
+            Assert.AreEqual("xyz", country.Value);
         }
-
-        //[TestMethod]
-        //public void TestIfPartsFromUrlAreCorrect()
-        //{
-        //    var url = new Url("http://www.domain.com.br");
-        //    Assert.AreEqual(3, url.Domain.Parts.Length);
-        //    Assert.AreEqual("domain", url.Domain.Parts[0]);
-        //    Assert.AreEqual("com", url.Domain.Parts[1]);
-        //    Assert.AreEqual("br", url.Domain.Parts[2]);
-        //}
-
     }
 }

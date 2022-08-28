@@ -3,22 +3,16 @@ using Crawler.Infra.Databases.DAL;
 using Crawler.Infra.Databases.DAL.Repositories;
 using Crawlers.Application.Interfaces.Services;
 using Crawlers.Application.Services;
-using Crawlers.Domain.Entities.ObjectValues.Urls;
-using Crawlers.Domain.Interfaces.DAL;
-using Crawlers.Domain.Interfaces.DAL.Repositories;
-using Crawlers.Domain.Interfaces.Services.WebCrawlerServices;
+using Crawlers.Domains.Entities.ObjectValues.Urls;
+using Crawlers.Domains.Interfaces.DAL;
+using Crawlers.Domains.Interfaces.DAL.Repositories;
+using Crawlers.Domains.Interfaces.Services.WebCrawlerServices;
 using Crawlers.Infra.WebScrapperServices.Services;
 using HtmlAgilityPack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConsoleApp.WebScrapper
 {
@@ -40,13 +34,12 @@ namespace ConsoleApp.WebScrapper
             IServiceProvider services = host.Services;
 
             var unitOfWork = services.GetRequiredService<IUnitOfWork>();
-            var url = "https://www1.folha.uol.com.br/poder/2022/08/lula-informa-ao-tse-ter-criado-redes-sociais-direcionadas-a-evangelicos.shtml";
+            var strUrl = "https://www1.folha.uol.com.br/poder/2022/08/lula-informa-ao-tse-ter-criado-redes-sociais-direcionadas-a-evangelicos.shtml";
             
-            if(unitOfWork.UrlRepository.GetUrl(url) == null)
+            if(unitOfWork.UrlRepository.GetUrl(strUrl) == null)
             {
-                unitOfWork.UrlRepository.Add(new Url(url));
+                unitOfWork.UrlRepository.Add(UrlCreator.Create(strUrl));
                 unitOfWork.Save();
-                
             }
 
             Execute(services);

@@ -1,6 +1,6 @@
-﻿using Crawlers.Domain.Entities.ObjectValues.Urls;
+﻿using Crawlers.Domains.Entities.ObjectValues.Urls;
 
-namespace Crawlers.Domain.Entities.Interfaces.ObjectValues.Urls
+namespace Crawlers.Domains.Entities.Interfaces.ObjectValues.Urls
 {
     public interface IUrlHandler
     {

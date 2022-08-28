@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Crawler.Domain\Crawlers.Domain.csproj" />
+    <ProjectReference Include="..\Crawler.Domain\Crawlers.Domains.csproj" />
     <ProjectReference Include="..\Infra.Databases\Crawler.Infra.Databases.csproj" />
   </ItemGroup>
 

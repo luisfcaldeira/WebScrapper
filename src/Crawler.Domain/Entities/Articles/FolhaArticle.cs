@@ -1,6 +1,6 @@
-﻿using Crawlers.Domain.Entities.ObjectValues.Urls;
+﻿using Crawlers.Domains.Entities.ObjectValues.Urls;
 
-namespace Crawlers.Domain.Entities.Articles
+namespace Crawlers.Domains.Entities.Articles
 {
     public class FolhaArticle : BaseArticle
     {

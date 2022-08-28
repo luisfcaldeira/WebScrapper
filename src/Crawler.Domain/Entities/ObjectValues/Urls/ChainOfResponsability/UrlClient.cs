@@ -1,8 +1,8 @@
-﻿using Crawlers.Domain.Entities.Interfaces.ObjectValues.Urls;
+﻿using Crawlers.Domains.Entities.Interfaces.ObjectValues.Urls;
 
-namespace Crawlers.Domain.Entities.ObjectValues.Urls.ChainOfResponsability
+namespace Crawlers.Domains.Entities.ObjectValues.Urls.ChainOfResponsability
 {
-    public class UrlClient
+    internal class UrlClient
     {
         public UrlClient(IUrlHandler urlHandler)
         {

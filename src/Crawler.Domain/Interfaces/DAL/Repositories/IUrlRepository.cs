@@ -1,6 +1,6 @@
-﻿using Crawlers.Domain.Entities.ObjectValues.Urls;
+﻿using Crawlers.Domains.Entities.ObjectValues.Urls;
 
-namespace Crawlers.Domain.Interfaces.DAL.Repositories
+namespace Crawlers.Domains.Interfaces.DAL.Repositories
 {
     public interface IUrlRepository : IRepositoryBase<Url>
     {

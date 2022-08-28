@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Crawler.Domain\Crawlers.Domain.csproj" />
+    <ProjectReference Include="..\Crawler.Domain\Crawlers.Domains.csproj" />
     <ProjectReference Include="..\Crawlers.Application\Crawlers.Application.csproj" />
     <ProjectReference Include="..\Crawlers.Infra.WebScrapperServices\Crawlers.Infra.WebScrapperServices.csproj" />
     <ProjectReference Include="..\Infra.Databases\Crawler.Infra.Databases.csproj" />

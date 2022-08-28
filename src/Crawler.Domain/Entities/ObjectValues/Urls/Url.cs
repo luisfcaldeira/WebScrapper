@@ -1,22 +1,30 @@
-﻿namespace Crawlers.Domain.Entities.ObjectValues.Urls
+﻿namespace Crawlers.Domains.Entities.ObjectValues.Urls
 {
     public class Url
     {
         public int Id { get; private set; }
-        public UrlProtocol Protocol { get; private set; }
-        public UrlDomain Domain { get; private set; }
-        public UrlDirectory Directory { get; private set; }
+        public Domain Domain { get; private set; }
+        public string Value { get; set; } = string.Empty;
+        public bool IsVisited { get; set; } = false;
 
-        public Url(string urlString)
+        protected Url()
         {
-            Protocol = new UrlProtocol(urlString);
-            Domain = new UrlDomain(urlString);
-            Directory = new UrlDirectory(urlString);
+            Domain = new Domain();  
         }
 
-        public bool IsValid(UrlDomain otherDomain)
+        public Url(Domain domain) : this()
+        {
+            Domain = domain;
+        }
+
+        public bool IsValid(Domain otherDomain)
         {
             return otherDomain.Equals(Domain);
+        }
+
+        public override string? ToString()
+        {
+            return Domain.ToString();
         }
     }
 }

@@ -1,6 +1,6 @@
-﻿using Crawlers.Domain.Entities.Articles;
-using Crawlers.Domain.Entities.ObjectValues.Urls;
-using Crawlers.Domain.Interfaces.Services.WebCrawlerServices;
+﻿using Crawlers.Domains.Entities.Articles;
+using Crawlers.Domains.Entities.ObjectValues.Urls;
+using Crawlers.Domains.Interfaces.Services.WebCrawlerServices;
 using HtmlAgilityPack;
 using System.Text;
 

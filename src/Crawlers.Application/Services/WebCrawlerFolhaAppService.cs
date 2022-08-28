@@ -1,6 +1,7 @@
 ﻿using Crawlers.Application.Interfaces.Services;
-using Crawlers.Domain.Interfaces.DAL;
-using Crawlers.Domain.Interfaces.Services.WebCrawlerServices;
+using Crawlers.Domains.Entities.ObjectValues.Urls;
+using Crawlers.Domains.Interfaces.DAL;
+using Crawlers.Domains.Interfaces.Services.WebCrawlerServices;
 
 namespace Crawlers.Application.Services
 {
@@ -22,14 +23,14 @@ namespace Crawlers.Application.Services
             {
                 var currentDomain = url.Domain;
                 var folha = FolhaWebCrawlerService.GetEntity(url);
-                // TODO não está puxando as urls para o domínio atual. 
+                // TODO criar um construtor para domain poder incluir as propriedades separadas conforme a regra que capturou a URL
                 // TODO precisa criar uma regra para validar o domínio da url e ver se casa com boa parte do domínio atual
                 var newUrls = folha.GetValidUrls(currentDomain);
                 SaveNewUrls(newUrls);
             }
         }
 
-        private void SaveNewUrls(System.Collections.Generic.IEnumerable<Domain.Entities.ObjectValues.Urls.Url> newUrls)
+        private void SaveNewUrls(System.Collections.Generic.IEnumerable<Url> newUrls)
         {
             foreach(var url in newUrls)
             {

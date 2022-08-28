@@ -1,6 +1,6 @@
-﻿using Crawlers.Domain.Entities.ObjectValues.Urls;
+﻿using Crawlers.Domains.Entities.ObjectValues.Urls;
 
-namespace Crawlers.Domain.Interfaces.Services.WebCrawlerServices
+namespace Crawlers.Domains.Interfaces.Services.WebCrawlerServices
 {
     public interface IWebCrawlerService<T> where T : class
     {

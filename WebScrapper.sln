@@ -19,11 +19,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crawler.Infra.Databases", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Crawlers", "Crawlers", "{88F9AB72-BAA9-42F2-936B-850EAC0723E7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crawlers.Domain", "src\Crawler.Domain\Crawlers.Domain.csproj", "{54440775-AF62-4B31-834A-FD020710388A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crawlers.Domains", "src\Crawler.Domain\Crawlers.Domains.csproj", "{54440775-AF62-4B31-834A-FD020710388A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{9B295EE8-9BB4-426A-BEC8-97701DCD6A67}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Crawler.Domain", "src\Tests.Crawler.Domain\Tests.Crawler.Domain.csproj", "{29407EB7-9988-4098-8DF7-4C3933CCDDFE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Crawler.Domains", "src\Tests.Crawler.Domain\Tests.Crawler.Domains.csproj", "{29407EB7-9988-4098-8DF7-4C3933CCDDFE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contexts", "Contexts", "{7D7226D3-8B20-4BF2-9AFE-242B2CC8A1D9}"
 EndProject

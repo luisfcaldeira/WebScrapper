@@ -1,18 +1,18 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Crawlers.Domain.Entities.ObjectValues.Urls
+namespace Crawlers.Domains.Entities.ObjectValues.Urls
 {
     public class UrlDirectory
     {
-        private const string RegexPattern = @"\/(?<directory>[^\/]+)";
+        private const string RegexPattern = @"\/{1}(?<directory>\S+)";
         public string Value { get; set; }
 
-        protected UrlDirectory()
+        public UrlDirectory()
         {
-
+            Value = "";
         }
 
-        public UrlDirectory(string url)
+        public UrlDirectory(string url) : this()
         {
             Extract(url);
         }
@@ -25,6 +25,11 @@ namespace Crawlers.Domain.Entities.ObjectValues.Urls
                 var groups = regex.Match(url).Groups;
                 Value = groups["directory"].Value;
             }
+        }
+
+        public override string? ToString()
+        {
+            return "/" + Value;
         }
     }
 }

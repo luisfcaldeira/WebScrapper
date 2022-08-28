@@ -1,4 +1,4 @@
-﻿namespace Crawlers.Domain.Exceptions.Urls
+﻿namespace Crawlers.Domains.Exceptions.Urls
 {
     public class NotWellFormedUrlException : Exception
     {

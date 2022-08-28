@@ -1,9 +1,9 @@
-﻿using Crawlers.Domain.Entities.Interfaces.ObjectValues.Urls;
+﻿using Crawlers.Domains.Entities.Interfaces.ObjectValues.Urls;
 using System.Text.RegularExpressions;
 
-namespace Crawlers.Domain.Entities.ObjectValues.Urls.ChainOfResponsability
+namespace Crawlers.Domains.Entities.ObjectValues.Urls.ChainOfResponsability
 {
-    public abstract class AbstractUrlHandler
+    internal abstract class AbstractUrlHandler
     {
         protected abstract string Pattern { get; }
         private IUrlHandler _nextHandler;
@@ -20,9 +20,11 @@ namespace Crawlers.Domain.Entities.ObjectValues.Urls.ChainOfResponsability
 
             if (regex.IsMatch(request.ToString()))
             {
-                return new Url(request);
+                return CreateUrl(request, regex.Match(request).Groups);
             } 
             return _nextHandler.Handle(request);
         }
+
+        protected abstract Url CreateUrl(string request, GroupCollection groups);
     }
 }
