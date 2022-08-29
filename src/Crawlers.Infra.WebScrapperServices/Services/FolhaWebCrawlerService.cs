@@ -12,7 +12,7 @@ namespace Crawlers.Infra.WebScrapperServices.Services
         {
         }
 
-        public override string GetContent(Url url)
+        public override string GetContent(Page url)
         {
             var doc = GetDocument(url);
             var divs = doc.DocumentNode.SelectNodes("//div");
@@ -28,7 +28,7 @@ namespace Crawlers.Infra.WebScrapperServices.Services
             return Decode(result.ToString());
         }
 
-        public DateTime? GetPublishDate(Url url)
+        public DateTime? GetPublishDate(Page url)
         {
             var strDate = GetMeta(url, "article:published_time");
             if (strDate == null)
@@ -36,7 +36,7 @@ namespace Crawlers.Infra.WebScrapperServices.Services
             return DateTime.Parse(strDate);
         }
 
-        public override FolhaArticle GetEntity(Url url)
+        public override FolhaArticle GetEntity(Page url)
         {
             return new FolhaArticle(GetTitle(url), GetContent(url), url, GetPublishDate(url), GetAnchors(url));
         }

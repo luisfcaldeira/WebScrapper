@@ -6,9 +6,9 @@ namespace Crawlers.Domains.Entities.ObjectValues.Urls.ChainOfResponsability
 {
     internal class WithCountryUrl : AbstractUrlHandler, IUrlHandler
     {
-        protected override string Pattern { get; } = @"^(?:(?<protocol>[htps]{4,5})\:\/\/)?(?<subdomain>[^\.\s]*)?\.?(?<domain_name>[\S]*)\.(?<toplevel>[^\.\s]{2,3})\.(?<country>[^\.\s]{2})(?<directory>\/{1}[\S]+)?$";
+        protected override string Pattern { get; } = @"^(?:(?<protocol>[htps]{4,5}))?\:?\/{0,2}(?<subdomain>[^\.\s]*)?\.?(?<domain_name>[\S]*)\.(?<toplevel>[^\.\s]{2,3})\.(?<country>[^\.\s]{2})\/{0,1}(?<directory>[\S]+)?$";
 
-        protected override Url CreateUrl(string request, GroupCollection groups)
+        protected override Page CreateUrl(string request, GroupCollection groups)
         {
             var protocol = groups["protocol"].Value;
             var subdomain = groups["subdomain"].Value;
@@ -17,7 +17,7 @@ namespace Crawlers.Domains.Entities.ObjectValues.Urls.ChainOfResponsability
             var country = groups["country"].Value;
             var directory = groups["directory"].Value;
 
-            return UrlBuilder.With(domainName, toplevel)
+            return PageBuilder.With(domainName, toplevel)
                 .WithUrl(request)
                 .WithProtocol(protocol)
                 .WithSubdomain(subdomain)

@@ -8,12 +8,12 @@ namespace Crawlers.Domains.Entities.ObjectValues.Urls.ChainOfResponsability
     {
         protected override string Pattern { get; } = "";
 
-        public override Url Handle(string request)
+        public override Page Handle(string request)
         {
             throw new NotWellFormedUrlException(request);
         }
 
-        protected override Url CreateUrl(string request, GroupCollection groups)
+        protected override Page CreateUrl(string request, GroupCollection groups)
         {
             throw new NotWellFormedUrlException(request);
         }

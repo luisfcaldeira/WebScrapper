@@ -6,9 +6,9 @@ namespace Crawlers.Domains.Entities.ObjectValues.Urls.ChainOfResponsability
 {
     internal class WithSubdomainUrl : AbstractUrlHandler, IUrlHandler
     {
-        protected override string Pattern { get; } = @"^(?:(?<protocol>[htps]{4,5})\:\/\/)?(?<subdomain>[^\.\s]*)\.(?<domain_name>[^\.\s]*)\.(?<toplevel>[^\.\s]{2,3})(?<directory>\/{1}\S+)?$";
+        protected override string Pattern { get; } = @"^(?:(?<protocol>[htps]{4,5})\:\/\/)?(?<subdomain>[^\.\s]*)\.(?<domain_name>[^\.\s]*)\.(?<toplevel>[^\.\s]{2,3})\/{0,1}(?<directory>[\S]+)?$";
 
-        protected override Url CreateUrl(string request, GroupCollection groups)
+        protected override Page CreateUrl(string request, GroupCollection groups)
         {
             var protocol = groups["protocol"].Value;
             var subDomain = groups["subdomain"].Value;
@@ -16,7 +16,7 @@ namespace Crawlers.Domains.Entities.ObjectValues.Urls.ChainOfResponsability
             var topLevel = groups["toplevel"].Value;
             var directory = groups["directory"].Value;
 
-            return UrlBuilder.With(name, topLevel)
+            return PageBuilder.With(name, topLevel)
                 .WithUrl(request)
                 .WithProtocol(protocol)
                 .WithSubdomain(subDomain)

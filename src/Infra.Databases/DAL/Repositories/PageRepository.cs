@@ -4,18 +4,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Crawler.Infra.Databases.DAL.Repositories
 {
-    public class UrlRepository : RepositoryBase<Url>, IUrlRepository
+    public class PageRepository : RepositoryBase<Page>, IPageRepository
     {
-        public UrlRepository(DbContext dbContext) : base(dbContext)
+        public PageRepository(DbContext dbContext) : base(dbContext)
         {
         }
 
-        public Url GetUrl(string url)
+        public Page GetPage(string url)
         {
-            return GetAll().Where(u => u.Value == url).FirstOrDefault();    
+            return GetAll().Where(u => u.Url == url).FirstOrDefault();    
         }
 
-        public IEnumerable<Url> GetAllNotVisited()
+        public IEnumerable<Page> GetAllNotVisited()
         {
             return GetAll().Where(url => !url.IsVisited);
         }

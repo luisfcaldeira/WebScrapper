@@ -4,7 +4,7 @@ namespace Crawlers.Domains.Entities.ObjectValues.Urls
 {
     public class UrlDirectory
     {
-        private const string RegexPattern = @"\/{1}(?<directory>\S+)";
+        private const string RegexPattern = @"\/{0,1}(?<directory>\S+)";
         public string Value { get; set; }
 
         public UrlDirectory()

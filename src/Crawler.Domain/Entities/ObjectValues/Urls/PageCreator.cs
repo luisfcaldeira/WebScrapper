@@ -2,23 +2,23 @@
 
 namespace Crawlers.Domains.Entities.ObjectValues.Urls
 {
-    public static class UrlCreator
+    public static class PageCreator
     {
-        public static Url Create(string url)
+        public static Page Create(string url)
         {
             var twoElements = new TwoElementsUrl();
             var withSubdomain = new WithSubdomainUrl();
             var withCountry = new WithCountryUrl();
             var withError = new NotWellFormedUrl();
 
-            twoElements
+            withCountry
                 .SetNext(withSubdomain)
-                .SetNext(withCountry)
+                .SetNext(twoElements)
                 .SetNext(withError);
 
-            var client = new UrlClient(twoElements);
+            var client = new UrlClient(withCountry);
 
-            return client.Handle(url);
+            return client.Handle(url.Trim());
         }
     }
 }

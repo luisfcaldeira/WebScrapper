@@ -15,16 +15,16 @@ namespace Crawlers.Infra.WebScrapperServices.Services
 
         public HtmlWeb Web { get; }
 
-        public IList<Url> GetAnchors(Url url)
+        public IList<Page> GetAnchors(Page url)
         {
             HtmlDocument doc = GetDocument(url);
             var anchors = doc.DocumentNode.SelectNodes("//a");
-            var result = new List<Url>();
+            var result = new List<Page>();
             foreach (var anchor in anchors)
             {
                 try
                 {
-                    result.Add(UrlCreator.Create(anchor.GetAttributeValue("href", "")));
+                    result.Add(PageCreator.Create(anchor.GetAttributeValue("href", "")));
                 }
                 catch (Exception ex)
                 {
@@ -35,7 +35,7 @@ namespace Crawlers.Infra.WebScrapperServices.Services
             return result;
         }
 
-        public string GetTitle(Url url)
+        public string GetTitle(Page url)
         {
             var doc = GetDocument(url);
             var title = doc.DocumentNode.SelectNodes("//head/title").First();
@@ -50,7 +50,7 @@ namespace Crawlers.Infra.WebScrapperServices.Services
             return Encoding.UTF8.GetString(bytes);
         }
 
-        public string? GetMeta(Url url, string metaName)
+        public string? GetMeta(Page url, string metaName)
         {
             var doc = GetDocument(url);
             var metasNodes = doc.DocumentNode.SelectNodes("//head/meta");
@@ -58,13 +58,13 @@ namespace Crawlers.Infra.WebScrapperServices.Services
 
         }
 
-        protected HtmlDocument GetDocument(Url url)
+        protected HtmlDocument GetDocument(Page url)
         {
-            return Web.Load(url.Value);
+            return Web.Load(url.Url);
         }
 
-        public abstract string GetContent(Url url);
+        public abstract string GetContent(Page url);
 
-        public abstract T GetEntity(Url url);
+        public abstract T GetEntity(Page url);
     }
 }

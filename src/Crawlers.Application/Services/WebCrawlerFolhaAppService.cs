@@ -2,6 +2,7 @@
 using Crawlers.Domains.Entities.ObjectValues.Urls;
 using Crawlers.Domains.Interfaces.DAL;
 using Crawlers.Domains.Interfaces.Services.WebCrawlerServices;
+using System.Collections.Generic;
 
 namespace Crawlers.Application.Services
 {
@@ -18,7 +19,7 @@ namespace Crawlers.Application.Services
 
         public void Scrap()
         {
-            var urls = UnitOfWork.UrlRepository.GetAllNotVisited();
+            var urls = UnitOfWork.PageRepository.GetAllNotVisited();
             foreach (var url in urls)
             {
                 var currentDomain = url.Domain;
@@ -30,11 +31,11 @@ namespace Crawlers.Application.Services
             }
         }
 
-        private void SaveNewUrls(System.Collections.Generic.IEnumerable<Url> newUrls)
+        private void SaveNewUrls(IEnumerable<Page> pages)
         {
-            foreach(var url in newUrls)
+            foreach(var page in pages)
             {
-                UnitOfWork.UrlRepository.Add(url);
+                UnitOfWork.PageRepository.Add(page);
             }
 
             UnitOfWork.Save();

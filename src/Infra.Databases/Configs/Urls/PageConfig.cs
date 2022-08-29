@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Crawler.Infra.Databases.Configs.Urls
 {
-    internal class UrlConfig : IEntityTypeConfiguration<Url>
+    internal class PageConfig : IEntityTypeConfiguration<Page>
     {
-        public void Configure(EntityTypeBuilder<Url> builder)
+        public void Configure(EntityTypeBuilder<Page> builder)
         {
             builder.OwnsOne(url => url.Domain);
             builder.OwnsOne(url => url.Domain, u =>

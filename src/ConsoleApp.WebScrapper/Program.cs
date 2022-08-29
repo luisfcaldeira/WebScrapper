@@ -23,7 +23,7 @@ namespace ConsoleApp.WebScrapper
 
             using IHost host = Host.CreateDefaultBuilder()
             .ConfigureServices((_, services) => 
-                services.AddTransient<IUrlRepository, UrlRepository>()
+                services.AddTransient<IPageRepository, PageRepository>()
                 .AddTransient<DbContext>(provider => new CrawlerDbContext(@"Server=(localdb)\mssqllocaldb;Database=Test"))
                 .AddTransient<IWebCrawlerFolhaAppService, WebCrawlerFolhaAppService>()
                 .AddTransient<IFolhaWebCrawlerService, FolhaWebCrawlerService>()
@@ -36,9 +36,9 @@ namespace ConsoleApp.WebScrapper
             var unitOfWork = services.GetRequiredService<IUnitOfWork>();
             var strUrl = "https://www1.folha.uol.com.br/poder/2022/08/lula-informa-ao-tse-ter-criado-redes-sociais-direcionadas-a-evangelicos.shtml";
             
-            if(unitOfWork.UrlRepository.GetUrl(strUrl) == null)
+            if(unitOfWork.PageRepository.GetPage(strUrl) == null)
             {
-                unitOfWork.UrlRepository.Add(UrlCreator.Create(strUrl));
+                unitOfWork.PageRepository.Add(PageCreator.Create(strUrl));
                 unitOfWork.Save();
             }
 

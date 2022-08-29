@@ -28,7 +28,7 @@ namespace Crawler.Infra.Databases.Context
             
             modelBuilder.HasDefaultSchema(GetType().FullName.Split('.')[0]);
 
-            modelBuilder.ApplyConfiguration<Url>(new UrlConfig());
+            modelBuilder.ApplyConfiguration<Page>(new PageConfig());
         }
     }
 }

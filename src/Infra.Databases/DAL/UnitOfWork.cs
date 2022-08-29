@@ -8,13 +8,13 @@ namespace Crawler.Infra.Databases.DAL
     public class UnitOfWork : IUnitOfWork
     {
         private bool disposed = false;
-        private IUrlRepository _urlRepository;
-        public IUrlRepository UrlRepository 
+        private IPageRepository _urlRepository;
+        public IPageRepository PageRepository 
         { 
             get
             {
                 if (_urlRepository == null)
-                    _urlRepository = new UrlRepository(DbContext);
+                    _urlRepository = new PageRepository(DbContext);
                 return _urlRepository;
             }
         }

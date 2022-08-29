@@ -14,7 +14,7 @@ namespace Crawlers.Domains.Entities.ObjectValues.Urls.ChainOfResponsability
             return handler;
         }
 
-        public virtual Url Handle(string request)
+        public virtual Page Handle(string request)
         {
             var regex = new Regex(Pattern);
 
@@ -25,6 +25,6 @@ namespace Crawlers.Domains.Entities.ObjectValues.Urls.ChainOfResponsability
             return _nextHandler.Handle(request);
         }
 
-        protected abstract Url CreateUrl(string request, GroupCollection groups);
+        protected abstract Page CreateUrl(string request, GroupCollection groups);
     }
 }

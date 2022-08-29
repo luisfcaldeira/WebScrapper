@@ -4,10 +4,10 @@ namespace Crawlers.Domains.Interfaces.Services.WebCrawlerServices
 {
     public interface IWebCrawlerService<T> where T : class
     {
-        IList<Url> GetAnchors(Url url);
-        string GetTitle(Url url);
-        string GetContent(Url url);
-        T GetEntity(Url url);
-        string? GetMeta(Url url, string metaName);
+        IList<Page> GetAnchors(Page url);
+        string GetTitle(Page url);
+        string GetContent(Page url);
+        T GetEntity(Page url);
+        string? GetMeta(Page url, string metaName);
     }
 }

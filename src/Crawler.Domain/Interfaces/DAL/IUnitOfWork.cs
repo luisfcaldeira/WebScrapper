@@ -4,7 +4,7 @@ namespace Crawlers.Domains.Interfaces.DAL
 {
     public interface IUnitOfWork : IDisposable
     {
-        IUrlRepository UrlRepository { get; }
+        IPageRepository PageRepository { get; }
         void Save();
     }
 }

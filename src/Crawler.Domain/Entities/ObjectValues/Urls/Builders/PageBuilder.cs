@@ -2,21 +2,23 @@
 
 namespace Crawlers.Domains.Entities.ObjectValues.Urls.Builders
 {
-    public class UrlBuilder : IOptions, IFirstOption
+    public class PageBuilder : IOptions, IFirstOption
     {
         private static Domain _domain;
+        private string _url;
 
-        private UrlBuilder () {}
+        private PageBuilder () {}
 
         public static IFirstOption With(string domainName, string topLevel)
         {
             _domain = new Domain(domainName, topLevel);
-            return new UrlBuilder();
+            return new PageBuilder();
         }
 
         public IOptions WithUrl(string url)
         {
-            return new UrlBuilder();
+            _url = url;
+            return this;
         }
 
         public IOptions WithProtocol(string protocol)
@@ -43,9 +45,9 @@ namespace Crawlers.Domains.Entities.ObjectValues.Urls.Builders
             return this;
         }
 
-        public Url Create()
+        public Page Create()
         {
-            return new Url(_domain);
+            return new Page(_domain, _url);
         }
     }
 }

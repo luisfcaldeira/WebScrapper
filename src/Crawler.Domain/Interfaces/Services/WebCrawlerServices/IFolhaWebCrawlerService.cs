@@ -5,6 +5,6 @@ namespace Crawlers.Domains.Interfaces.Services.WebCrawlerServices
 {
     public interface IFolhaWebCrawlerService : IWebCrawlerService<FolhaArticle>
     {
-        DateTime? GetPublishDate(Url url);
+        DateTime? GetPublishDate(Page url);
     }
 }

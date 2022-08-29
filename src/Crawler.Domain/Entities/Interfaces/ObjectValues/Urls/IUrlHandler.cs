@@ -6,6 +6,6 @@ namespace Crawlers.Domains.Entities.Interfaces.ObjectValues.Urls
     {
         IUrlHandler SetNext(IUrlHandler handler);
 
-        Url Handle(string request);
+        Page Handle(string request);
     }
 }

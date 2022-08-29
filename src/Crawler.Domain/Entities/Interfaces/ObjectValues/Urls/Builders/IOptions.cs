@@ -8,6 +8,6 @@ namespace Crawlers.Domains.Entities.Interfaces.ObjectValues.Urls.Builders
         IOptions WithSubdomain(string subdomain);
         IOptions WithCountry(string country);
         IOptions WithDirectory(string directory);
-        Url Create();
+        Page Create();
     }
 }

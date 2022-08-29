@@ -1,20 +1,21 @@
 ﻿namespace Crawlers.Domains.Entities.ObjectValues.Urls
 {
-    public class Url
+    public class Page
     {
         public int Id { get; private set; }
         public Domain Domain { get; private set; }
-        public string Value { get; set; } = string.Empty;
+        public string Url { get; set; } = string.Empty;
         public bool IsVisited { get; set; } = false;
 
-        protected Url()
+        protected Page()
         {
             Domain = new Domain();  
         }
 
-        public Url(Domain domain) : this()
+        public Page(Domain domain, string url) : this()
         {
             Domain = domain;
+            Url = url;
         }
 
         public bool IsValid(Domain otherDomain)

@@ -11,7 +11,7 @@ namespace Crawlers.Domains.Entities.ObjectValues.Urls.ChainOfResponsability
 
         public IUrlHandler UrlHandler { get; }
 
-        public Url Handle(string url)
+        public Page Handle(string url)
         {
             return UrlHandler.Handle(url);
         }

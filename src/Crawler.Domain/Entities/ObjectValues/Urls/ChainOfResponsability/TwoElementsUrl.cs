@@ -6,18 +6,20 @@ namespace Crawlers.Domains.Entities.ObjectValues.Urls.ChainOfResponsability
 {
     internal class TwoElementsUrl : AbstractUrlHandler, IUrlHandler
     {
-        protected override string Pattern { get; } = @"^(?:(?<protocol>[htps]{4,5})\:\/\/)?(?<domain_name>[^\.\s]*)\.(?<top_level>[^\.\s]{2,3})$";
+        protected override string Pattern { get; } = @"^(?:(?<protocol>[htps]{4,5})\:\/\/)?(?<domain_name>[^\.\s]*)\.(?<top_level>[^\.\s]{2,3})\/{0,1}(?<directory>[\S]+)?$";
 
-        protected override Url CreateUrl(string request, GroupCollection groups)
+        protected override Page CreateUrl(string request, GroupCollection groups)
         {
             var protocol = groups["protocol"].Value;
             var domainName = groups["domain_name"].Value;
             var topLevel = groups["top_level"].Value;
+            var directory = groups["directory"].Value;
 
-            return UrlBuilder
+            return PageBuilder
                 .With(domainName, topLevel)
                 .WithUrl(request)
                 .WithProtocol(protocol)
+                .WithDirectory(directory)
                 .Create();
         }
     }
