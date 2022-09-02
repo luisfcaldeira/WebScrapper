@@ -9,24 +9,24 @@ namespace Crawlers.Domains.Entities.Articles
         public string Content { get; private set; } = string.Empty;
         public Page Url { get; private set; }
         public DateTime? Published { get; private set; } 
-        public IList<Page> Urls { get; private set; }
+        public IList<Page> ReferredPages { get; private set; }
 
         protected BaseArticle()
         {
         }
 
-        protected BaseArticle(string title, string content, Page url, DateTime? published, IList<Page> urls)
+        protected BaseArticle(string title, string content, Page url, DateTime? published, IList<Page> referredPages)
         {
             Title = title;
             Content = content;
             Url = url;
             Published = published;
-            Urls = urls;
+            ReferredPages = referredPages;
         }
 
         public IEnumerable<Page>? GetValidUrls(Domain domain)
         {
-            return Urls?.Where(url => url.IsValid(domain)).ToList();
+            return ReferredPages?.Where(url => url.IsValid(domain)).ToList();
         }
     }
 }

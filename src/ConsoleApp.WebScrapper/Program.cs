@@ -1,4 +1,5 @@
-﻿using Crawler.Infra.Databases.Context;
+﻿using Core.Infra.IoC;
+using Crawler.Infra.Databases.Context;
 using Crawler.Infra.Databases.DAL;
 using Crawler.Infra.Databases.DAL.Repositories;
 using Crawlers.Application.Interfaces.Services;
@@ -21,19 +22,10 @@ namespace ConsoleApp.WebScrapper
         public static void Main()
         {
 
-            using IHost host = Host.CreateDefaultBuilder()
-            .ConfigureServices((_, services) => 
-                services.AddTransient<IPageRepository, PageRepository>()
-                .AddTransient<DbContext>(provider => new CrawlerDbContext(@"Server=(localdb)\mssqllocaldb;Database=Test"))
-                .AddTransient<IWebCrawlerFolhaAppService, WebCrawlerFolhaAppService>()
-                .AddTransient<IFolhaWebCrawlerService, FolhaWebCrawlerService>()
-                .AddTransient((provider) => new HtmlWeb())
-                .AddTransient<IUnitOfWork, UnitOfWork>())
-            .Build();
+            var iocMapper = new IocMapper();
 
-            IServiceProvider services = host.Services;
+            var unitOfWork = iocMapper.GetService<IUnitOfWork>();
 
-            var unitOfWork = services.GetRequiredService<IUnitOfWork>();
             var strUrl = "https://www1.folha.uol.com.br/poder/2022/08/lula-informa-ao-tse-ter-criado-redes-sociais-direcionadas-a-evangelicos.shtml";
             
             if(unitOfWork.PageRepository.GetPage(strUrl) == null)
@@ -42,21 +34,8 @@ namespace ConsoleApp.WebScrapper
                 unitOfWork.Save();
             }
 
-            Execute(services);
-
-            host.RunAsync();
-
-            Console.ReadLine();
-        }
-
-        static void Execute(IServiceProvider services)
-        {
-            using IServiceScope serviceScope = services.CreateScope();
-            IServiceProvider provider = serviceScope.ServiceProvider;
-
-            var crawler = provider.GetRequiredService<IWebCrawlerFolhaAppService>();
+            var crawler = iocMapper.GetService<IWebCrawlerFolhaAppService>();
             crawler.Scrap();
-
         }
     }
 }

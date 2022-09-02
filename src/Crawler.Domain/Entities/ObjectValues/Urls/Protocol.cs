@@ -4,7 +4,7 @@ namespace Crawlers.Domains.Entities.ObjectValues.Urls
 {
     public class Protocol
     {
-        public const string RegexPattern = @"([htps]{4,5})\:\/\/";
+        public const string RegexPattern = @"([htps]{4,5})\:?\/?\/?";
         public string Value { get; private set; } = string.Empty;
 
         public Protocol()

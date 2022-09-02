@@ -1,26 +1,21 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>dsiable</ImplicitUsings>
-    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.43" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core.Infra.IoC\Core.Infra.IoC.csproj" />
     <ProjectReference Include="..\Crawler.Domain\Crawlers.Domains.csproj" />
     <ProjectReference Include="..\Crawlers.Application\Crawlers.Application.csproj" />
     <ProjectReference Include="..\Crawlers.Infra.WebScrapperServices\Crawlers.Infra.WebScrapperServices.csproj" />
     <ProjectReference Include="..\Infra.Databases\Crawler.Infra.Databases.csproj" />
+    <ProjectReference Include="..\Mockers.Contexts.Crawlers.Infra.Services\Mockers.Contexts.Crawlers.Infra.Services.csproj" />
   </ItemGroup>
 
 </Project>

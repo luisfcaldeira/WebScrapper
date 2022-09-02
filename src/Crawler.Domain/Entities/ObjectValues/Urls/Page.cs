@@ -5,7 +5,16 @@
         public int Id { get; private set; }
         public Domain Domain { get; private set; }
         public string Url { get; set; } = string.Empty;
-        public bool IsVisited { get; set; } = false;
+        public DateTime Created { get; set; } = DateTime.Now;
+        public DateTime? Visited { get; private set; }
+
+        public bool IsVisited 
+        { 
+            get
+            {
+                return Visited != null;
+            } 
+        }
 
         protected Page()
         {
@@ -26,6 +35,11 @@
         public override string? ToString()
         {
             return Domain.ToString();
+        }
+
+        public void Visit()
+        {
+            Visited = DateTime.Now;
         }
     }
 }

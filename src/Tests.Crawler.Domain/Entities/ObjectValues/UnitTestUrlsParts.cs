@@ -69,6 +69,14 @@ namespace Tests.Crawler.Domains.Entities.ObjectValues
             var protocol2 = new Protocol("https://www.domain.com.br/index.html?variable1=999&variable2=abcd");
 
             Assert.AreEqual("https", protocol2.Value);
+
+            var protocol3 = new Protocol("https");
+
+            Assert.AreEqual("https", protocol3.Value);
+
+            var protocol4 = new Protocol("https://");
+
+            Assert.AreEqual("https", protocol4.Value);
         }
 
         [TestMethod]

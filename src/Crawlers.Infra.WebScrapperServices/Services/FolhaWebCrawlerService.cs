@@ -1,14 +1,14 @@
 ﻿using Crawlers.Domains.Entities.Articles;
 using Crawlers.Domains.Entities.ObjectValues.Urls;
 using Crawlers.Domains.Interfaces.Services.WebCrawlerServices;
-using HtmlAgilityPack;
+using Crawlers.Infra.WebScrapperServices.Interfaces.InnerServices;
 using System.Text;
 
 namespace Crawlers.Infra.WebScrapperServices.Services
 {
     public class FolhaWebCrawlerService : WebCrawlerService<FolhaArticle>, IFolhaWebCrawlerService
     {
-        public FolhaWebCrawlerService(HtmlWeb web) : base(web)
+        public FolhaWebCrawlerService(IWebNavigator webNavigator) : base(webNavigator)
         {
         }
 
@@ -16,6 +16,8 @@ namespace Crawlers.Infra.WebScrapperServices.Services
         {
             var doc = GetDocument(url);
             var divs = doc.DocumentNode.SelectNodes("//div");
+            if (divs == null)
+                return String.Empty;
 
             var nodes = divs.Where(d => d.HasClass("c-news__body")).ToList();
             var result = new StringBuilder();
@@ -38,7 +40,7 @@ namespace Crawlers.Infra.WebScrapperServices.Services
 
         public override FolhaArticle GetEntity(Page url)
         {
-            return new FolhaArticle(GetTitle(url), GetContent(url), url, GetPublishDate(url), GetAnchors(url));
+            return new FolhaArticle(GetTitle(url), GetContent(url), url, GetPublishDate(url), GetReferredPages(url));
         }
     }
 }

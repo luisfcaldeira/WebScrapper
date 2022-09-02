@@ -1,5 +1,6 @@
 ﻿using Crawlers.Domains.Entities.ObjectValues.Urls;
 using Crawlers.Domains.Interfaces.Services.WebCrawlerServices;
+using Crawlers.Infra.WebScrapperServices.Interfaces.InnerServices;
 using HtmlAgilityPack;
 using System.Text;
 
@@ -8,14 +9,14 @@ namespace Crawlers.Infra.WebScrapperServices.Services
     public abstract class WebCrawlerService<T> : IWebCrawlerService<T> where T : class
     {
 
-        public WebCrawlerService(HtmlWeb web)
+        public WebCrawlerService(IWebNavigator webNavigator)
         {
-            Web = web;
+            WebNavigator = webNavigator;
         }
 
-        public HtmlWeb Web { get; }
+        private IWebNavigator WebNavigator { get; }
 
-        public IList<Page> GetAnchors(Page url)
+        public IList<Page> GetReferredPages(Page url)
         {
             HtmlDocument doc = GetDocument(url);
             var anchors = doc.DocumentNode.SelectNodes("//a");
@@ -35,10 +36,13 @@ namespace Crawlers.Infra.WebScrapperServices.Services
             return result;
         }
 
-        public string GetTitle(Page url)
+        public string? GetTitle(Page url)
         {
             var doc = GetDocument(url);
             var title = doc.DocumentNode.SelectNodes("//head/title").First();
+            if(title == null)
+                return null;
+
             // https://docs.microsoft.com/en-us/dotnet/api/system.text.encoding.getencodings?view=net-6.0#system-text-encoding-getencodings
             var titleStr = title.InnerText;
             return Decode(titleStr);
@@ -54,13 +58,30 @@ namespace Crawlers.Infra.WebScrapperServices.Services
         {
             var doc = GetDocument(url);
             var metasNodes = doc.DocumentNode.SelectNodes("//head/meta");
-            return metasNodes.Where(meta => meta.Name == metaName).Select(meta => meta.InnerHtml).FirstOrDefault();
 
+            foreach(var node in metasNodes)
+            {
+                if (GetAttributeValue(node, "name") == metaName)
+                    return GetAttributeValue(node, "content");
+            }
+
+            return null;
         }
 
-        protected HtmlDocument GetDocument(Page url)
+        private static string? GetAttributeValue(HtmlNode node, string name)
         {
-            return Web.Load(url.Url);
+            return GetAttribute(node, name)?.Value;
+        }
+
+        private static HtmlAttribute? GetAttribute(HtmlNode node, string name)
+        {
+            var attributes = node.GetAttributes();
+            return attributes.Where(a => a.Name == name).FirstOrDefault();
+        }
+
+        protected HtmlDocument GetDocument(Page page)
+        {
+            return WebNavigator.GetDocument(page);
         }
 
         public abstract string GetContent(Page url);

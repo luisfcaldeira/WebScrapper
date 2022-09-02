@@ -24,8 +24,6 @@ namespace Crawlers.Application.Services
             {
                 var currentDomain = url.Domain;
                 var folha = FolhaWebCrawlerService.GetEntity(url);
-                // TODO criar um construtor para domain poder incluir as propriedades separadas conforme a regra que capturou a URL
-                // TODO precisa criar uma regra para validar o domínio da url e ver se casa com boa parte do domínio atual
                 var newUrls = folha.GetValidUrls(currentDomain);
                 SaveNewUrls(newUrls);
             }
