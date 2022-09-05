@@ -1,5 +1,6 @@
-﻿using Crawler.Infra.Databases.Configs.Urls;
-using Crawlers.Domains.Entities.ObjectValues.Urls;
+﻿using Crawler.Infra.Databases.Configs.Pages;
+using Crawlers.Domains.Entities.Articles;
+using Crawlers.Domains.Entities.ObjectValues.Pages;
 using Microsoft.EntityFrameworkCore;
 
 namespace Crawler.Infra.Databases.Context
@@ -28,7 +29,10 @@ namespace Crawler.Infra.Databases.Context
             
             modelBuilder.HasDefaultSchema(GetType().FullName.Split('.')[0]);
 
-            modelBuilder.ApplyConfiguration<Page>(new PageConfig());
+            modelBuilder.Entity<FolhaArticle>();
+
+            modelBuilder.ApplyConfiguration(new PageConfig());
+            modelBuilder.ApplyConfiguration(new ArticleConfig());
         }
     }
 }

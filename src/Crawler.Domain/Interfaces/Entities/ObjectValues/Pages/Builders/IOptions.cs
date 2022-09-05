@@ -1,6 +1,6 @@
-﻿using Crawlers.Domains.Entities.ObjectValues.Urls;
+﻿using Crawlers.Domains.Entities.ObjectValues.Pages;
 
-namespace Crawlers.Domains.Entities.Interfaces.ObjectValues.Urls.Builders
+namespace Crawlers.Domains.Interfaces.Entities.ObjectValues.Pages.Builders
 {
     public interface IOptions
     {

@@ -1,4 +1,4 @@
-﻿namespace Crawlers.Domains.Entities.ObjectValues.Urls
+﻿namespace Crawlers.Domains.Entities.ObjectValues.Pages
 {
     public class Domain
     {

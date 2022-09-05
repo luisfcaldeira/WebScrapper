@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Crawlers.Domains.Entities.ObjectValues.Urls
+namespace Crawlers.Domains.Entities.ObjectValues.Pages
 {
     public class Country
     {

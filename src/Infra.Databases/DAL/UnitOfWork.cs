@@ -8,14 +8,28 @@ namespace Crawler.Infra.Databases.DAL
     public class UnitOfWork : IUnitOfWork
     {
         private bool disposed = false;
-        private IPageRepository _urlRepository;
+        private IPageRepository _pageRepository;
+        private IFolhaArticleRepository _folhaArticleRepository;
+
         public IPageRepository PageRepository 
         { 
             get
             {
-                if (_urlRepository == null)
-                    _urlRepository = new PageRepository(DbContext);
-                return _urlRepository;
+                if (_pageRepository == null)
+                    _pageRepository = new PageRepository(DbContext);
+
+                return _pageRepository;
+            }
+        }
+
+        public IFolhaArticleRepository FolhaArticleRepository
+        {
+            get
+            {
+                if(_folhaArticleRepository == null)
+                    _folhaArticleRepository = new FolhaArticleRepository(DbContext);
+
+                return _folhaArticleRepository;
             }
         }
 

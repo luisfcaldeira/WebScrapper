@@ -20,6 +20,14 @@ namespace Crawler.Infra.Databases.DAL.Repositories
             DbContext.Add(entity);
         }
 
+        public void AddRange(IEnumerable<T> entities)
+        {
+            foreach (T entity in entities)
+            {
+                Add(entity);
+            }
+        }
+
         public IEnumerable<T> GetAll()
         {
             return DbSet.ToList();
@@ -33,7 +41,8 @@ namespace Crawler.Infra.Databases.DAL.Repositories
         public void Delete(object id)
         {
             var entityToDelete = DbSet.Find(id);
-            Delete(entityToDelete);
+            if(entityToDelete != null)
+                Delete(entityToDelete);
         }
 
         public void Delete(T entityToDelete)

@@ -4,7 +4,7 @@ using Crawler.Infra.Databases.DAL;
 using Crawler.Infra.Databases.DAL.Repositories;
 using Crawlers.Application.Interfaces.Services;
 using Crawlers.Application.Services;
-using Crawlers.Domains.Entities.ObjectValues.Urls;
+using Crawlers.Domains.Entities.ObjectValues.Pages;
 using Crawlers.Domains.Interfaces.DAL;
 using Crawlers.Domains.Interfaces.DAL.Repositories;
 using Crawlers.Domains.Interfaces.Services.WebCrawlerServices;
@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ConsoleApp.WebScrapper
 {
@@ -27,15 +29,33 @@ namespace ConsoleApp.WebScrapper
             var unitOfWork = iocMapper.GetService<IUnitOfWork>();
 
             var strUrl = "https://www1.folha.uol.com.br/poder/2022/08/lula-informa-ao-tse-ter-criado-redes-sociais-direcionadas-a-evangelicos.shtml";
-            
-            if(unitOfWork.PageRepository.GetPage(strUrl) == null)
+
+            if (unitOfWork.PageRepository.GetPage(strUrl) == null)
             {
                 unitOfWork.PageRepository.Add(PageCreator.Create(strUrl));
                 unitOfWork.Save();
             }
 
             var crawler = iocMapper.GetService<IWebCrawlerFolhaAppService>();
-            crawler.Scrap();
+            var cancellation = new CancellationTokenSource();
+            AddListenerToCancel(cancellation);
+
+            // TODO Identificar se é um artigo válido antes de salvar. 
+            // TODO Protocolos HTTP não estão sendo salvos corretamente no DB. 
+            crawler.Scrap(cancellation.Token).Wait();
+
+            Console.WriteLine("Finished. Press any key to quit");
+            Console.ReadKey();
+        }
+
+        private static void AddListenerToCancel(CancellationTokenSource cancellation)
+        {
+            Console.CancelKeyPress += (sender, eventArgs) =>
+            {
+                Console.WriteLine("Cancel event triggered");
+                cancellation.Cancel();
+                eventArgs.Cancel = true;
+            };
         }
     }
 }

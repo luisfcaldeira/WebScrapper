@@ -1,5 +1,5 @@
 ﻿using Crawlers.Domains.Entities.Articles;
-using Crawlers.Domains.Entities.ObjectValues.Urls;
+using Crawlers.Domains.Entities.ObjectValues.Pages;
 
 namespace Crawlers.Domains.Interfaces.Services.WebCrawlerServices
 {

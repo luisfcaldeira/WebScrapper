@@ -1,10 +1,10 @@
-﻿using Crawlers.Domains.Entities.Interfaces.ObjectValues.Urls;
-using Crawlers.Domains.Entities.ObjectValues.Urls.Builders;
+﻿using Crawlers.Domains.Entities.ObjectValues.Pages.Builders;
+using Crawlers.Domains.Interfaces.Entities.ObjectValues.Pages;
 using System.Text.RegularExpressions;
 
-namespace Crawlers.Domains.Entities.ObjectValues.Urls.ChainOfResponsability
+namespace Crawlers.Domains.Entities.ObjectValues.Pages.ChainOfResponsability
 {
-    internal class WithCountryUrl : AbstractUrlHandler, IUrlHandler
+    internal class WithCountryUrl : AbstractUrlHandler, IPageHandler
     {
         protected override string Pattern { get; } = @"^(?:(?<protocol>[htps]{4,5}))?\:?\/{0,2}(?<subdomain>[^\.\s]*)?\.?(?<domain_name>[\S]*)\.(?<toplevel>[^\.\s]{2,3})\.(?<country>[^\.\s]{2})\/{0,1}(?<directory>[\S]+)?$";
 

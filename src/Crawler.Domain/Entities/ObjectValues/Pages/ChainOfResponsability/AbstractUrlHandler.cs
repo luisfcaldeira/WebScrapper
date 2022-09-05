@@ -1,14 +1,14 @@
-﻿using Crawlers.Domains.Entities.Interfaces.ObjectValues.Urls;
+﻿using Crawlers.Domains.Interfaces.Entities.ObjectValues.Pages;
 using System.Text.RegularExpressions;
 
-namespace Crawlers.Domains.Entities.ObjectValues.Urls.ChainOfResponsability
+namespace Crawlers.Domains.Entities.ObjectValues.Pages.ChainOfResponsability
 {
     internal abstract class AbstractUrlHandler
     {
         protected abstract string Pattern { get; }
-        private IUrlHandler _nextHandler;
+        private IPageHandler _nextHandler;
 
-        public IUrlHandler SetNext(IUrlHandler handler)
+        public IPageHandler SetNext(IPageHandler handler)
         {
             _nextHandler = handler;
             return handler;

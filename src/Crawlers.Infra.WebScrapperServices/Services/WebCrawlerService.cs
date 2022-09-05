@@ -1,7 +1,8 @@
-﻿using Crawlers.Domains.Entities.ObjectValues.Urls;
+﻿using Crawlers.Domains.Entities.ObjectValues.Pages;
 using Crawlers.Domains.Interfaces.Services.WebCrawlerServices;
 using Crawlers.Infra.WebScrapperServices.Interfaces.InnerServices;
 using HtmlAgilityPack;
+using System.Diagnostics;
 using System.Text;
 
 namespace Crawlers.Infra.WebScrapperServices.Services
@@ -29,7 +30,7 @@ namespace Crawlers.Infra.WebScrapperServices.Services
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"I couldn't record an anchor: [{ex.Message}]");
+                    Debug.WriteLine($"I couldn't reconize an anchor: [{ex.Message}]");
                 }
             }
 

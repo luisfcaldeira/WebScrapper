@@ -1,4 +1,4 @@
-﻿using Crawlers.Domains.Entities.ObjectValues.Urls;
+﻿using Crawlers.Domains.Entities.ObjectValues.Pages;
 using Crawlers.Domains.Interfaces.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,7 +10,7 @@ namespace Crawler.Infra.Databases.DAL.Repositories
         {
         }
 
-        public Page GetPage(string url)
+        public Page? GetPage(string url)
         {
             return GetAll().Where(u => u.Url == url).FirstOrDefault();    
         }
@@ -18,6 +18,17 @@ namespace Crawler.Infra.Databases.DAL.Repositories
         public IEnumerable<Page> GetAllNotVisited()
         {
             return GetAll().Where(url => !url.IsVisited);
+        }
+
+        public Page? GetOneNotVisited()
+        {
+            var all = GetAll();
+            return all.Where(u => !u.IsVisited).FirstOrDefault();
+        }
+
+        public bool Exists(Page page)
+        {
+            return GetPage(page.Url) != null;
         }
     }
 }

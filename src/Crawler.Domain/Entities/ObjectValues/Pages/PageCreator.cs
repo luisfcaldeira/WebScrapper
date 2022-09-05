@@ -1,6 +1,6 @@
-﻿using Crawlers.Domains.Entities.ObjectValues.Urls.ChainOfResponsability;
+﻿using Crawlers.Domains.Entities.ObjectValues.Pages.ChainOfResponsability;
 
-namespace Crawlers.Domains.Entities.ObjectValues.Urls
+namespace Crawlers.Domains.Entities.ObjectValues.Pages
 {
     public static class PageCreator
     {

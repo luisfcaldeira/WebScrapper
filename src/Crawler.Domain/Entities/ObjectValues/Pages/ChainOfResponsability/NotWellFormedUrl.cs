@@ -1,10 +1,10 @@
-﻿using Crawlers.Domains.Entities.Interfaces.ObjectValues.Urls;
-using Crawlers.Domains.Exceptions.Urls;
+﻿using Crawlers.Domains.Exceptions.Urls;
+using Crawlers.Domains.Interfaces.Entities.ObjectValues.Pages;
 using System.Text.RegularExpressions;
 
-namespace Crawlers.Domains.Entities.ObjectValues.Urls.ChainOfResponsability
+namespace Crawlers.Domains.Entities.ObjectValues.Pages.ChainOfResponsability
 {
-    internal class NotWellFormedUrl : AbstractUrlHandler, IUrlHandler
+    internal class NotWellFormedUrl : AbstractUrlHandler, IPageHandler
     {
         protected override string Pattern { get; } = "";
 

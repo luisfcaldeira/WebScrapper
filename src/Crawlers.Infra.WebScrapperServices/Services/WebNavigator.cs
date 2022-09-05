@@ -1,4 +1,4 @@
-﻿using Crawlers.Domains.Entities.ObjectValues.Urls;
+﻿using Crawlers.Domains.Entities.ObjectValues.Pages;
 using Crawlers.Infra.WebScrapperServices.Interfaces.InnerServices;
 using HtmlAgilityPack;
 

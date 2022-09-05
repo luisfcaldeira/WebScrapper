@@ -1,8 +1,12 @@
 ﻿using Crawlers.Application.Interfaces.Services;
-using Crawlers.Domains.Entities.ObjectValues.Urls;
+using Crawlers.Domains.Entities.Articles;
+using Crawlers.Domains.Entities.ObjectValues.Pages;
 using Crawlers.Domains.Interfaces.DAL;
 using Crawlers.Domains.Interfaces.Services.WebCrawlerServices;
+using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Crawlers.Application.Services
 {
@@ -17,26 +21,63 @@ namespace Crawlers.Application.Services
         private IUnitOfWork UnitOfWork;
         private IFolhaWebCrawlerService FolhaWebCrawlerService;
 
-        public void Scrap()
+        public async Task Scrap(CancellationToken cancellationToken)
         {
-            var urls = UnitOfWork.PageRepository.GetAllNotVisited();
-            foreach (var url in urls)
+            while (true)
             {
-                var currentDomain = url.Domain;
-                var folha = FolhaWebCrawlerService.GetEntity(url);
-                var newUrls = folha.GetValidUrls(currentDomain);
-                SaveNewUrls(newUrls);
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    Console.WriteLine("stopped");
+                    return;
+                }
+                ScrapOneIfExists();
             }
         }
 
-        private void SaveNewUrls(IEnumerable<Page> pages)
+        private void ScrapOneIfExists()
+        {
+            var url = UnitOfWork.PageRepository.GetOneNotVisited();
+            if (url != null)
+            {
+                var currentDomain = url.Domain;
+                var folha = FolhaWebCrawlerService.GetEntity(url);
+                SaveArticle(folha);
+                var newPages = folha.GetValidPages(currentDomain);
+                SaveNewPages(newPages);
+                url.Visit();
+                UnitOfWork.Save();
+            }
+        }
+
+
+        private void SaveNewPages(IEnumerable<Page> pages)
         {
             foreach(var page in pages)
             {
-                UnitOfWork.PageRepository.Add(page);
+                if(!UnitOfWork.PageRepository.Exists(page))
+                {
+                    UnitOfWork.PageRepository.Add(page);
+                } else
+                {
+                    var pageDb = UnitOfWork.PageRepository.GetPage(page.Url);
+                    pageDb.Update(page);
+                    UnitOfWork.PageRepository.Update(pageDb);
+                }
             }
+        }
 
-            UnitOfWork.Save();
+        private void SaveArticle(FolhaArticle folha)
+        {
+            if(!UnitOfWork.FolhaArticleRepository.Exists(folha))
+            {
+                UnitOfWork.FolhaArticleRepository.Add(folha);
+            }
+            else
+            {
+                FolhaArticle folhaDb = UnitOfWork.FolhaArticleRepository.GetArticle(folha.Page);
+                folhaDb.Update(folha);
+                UnitOfWork.FolhaArticleRepository.Update(folhaDb);
+            }
         }
     }
 }
