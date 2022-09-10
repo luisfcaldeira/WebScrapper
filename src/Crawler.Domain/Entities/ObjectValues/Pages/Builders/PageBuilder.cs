@@ -47,7 +47,10 @@ namespace Crawlers.Domains.Entities.ObjectValues.Pages.Builders
 
         public Page Create()
         {
-            return new Page(_domain, _url);
+            return new Page(_domain)
+            {
+                RawUrl = _url,
+            };
         }
     }
 }

@@ -1,9 +1,9 @@
-﻿using Crawler.Infra.Databases.DAL.Repositories;
+﻿using Crawlers.Infra.Databases.DAL.Repositories;
 using Crawlers.Domains.Interfaces.DAL;
 using Crawlers.Domains.Interfaces.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace Crawler.Infra.Databases.DAL
+namespace Crawlers.Infra.Databases.DAL
 {
     public class UnitOfWork : IUnitOfWork
     {

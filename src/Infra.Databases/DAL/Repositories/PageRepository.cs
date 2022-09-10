@@ -2,7 +2,7 @@
 using Crawlers.Domains.Interfaces.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace Crawler.Infra.Databases.DAL.Repositories
+namespace Crawlers.Infra.Databases.DAL.Repositories
 {
     public class PageRepository : RepositoryBase<Page>, IPageRepository
     {

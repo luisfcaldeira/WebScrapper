@@ -1,15 +1,25 @@
-﻿using Crawlers.Domains.Entities.Articles;
+﻿using Crawlers.Domains.Collections.ObjectValues.Pages;
+using Crawlers.Domains.Entities.Articles;
 
 namespace Crawlers.Domains.Entities.ObjectValues.Pages
 {
     public class Page
     {
         public int Id { get; set; }
-        public Domain Domain { get; private set; }
-        public string Url { get; set; } = string.Empty;
+        public Domain Domain { get; private set; } = new Domain();
         public DateTime Created { get; set; } = DateTime.Now;
         public DateTime? Visited { get; private set; }
-        public IEnumerable<BaseArticle> Articles{ get; set; }
+        public ICollection<BaseArticle> Articles{ get; set; }
+        public string? MessageErro { get; private set; }
+        public string RawUrl { get; internal set; }
+        public ICollection<PageCollection> PagesCollections { get; set; }
+        public string Url 
+        { 
+            get
+            {
+                return Domain.FullUrl();
+            }
+        }
 
         public bool IsVisited 
         { 
@@ -19,15 +29,14 @@ namespace Crawlers.Domains.Entities.ObjectValues.Pages
             } 
         }
 
+
         protected Page()
         {
-            Domain = new Domain();  
         }
 
-        public Page(Domain domain, string url) : this()
+        public Page(Domain domain)
         {
             Domain = domain;
-            Url = url;
         }
 
         public bool IsValid(Domain otherDomain)
@@ -35,14 +44,30 @@ namespace Crawlers.Domains.Entities.ObjectValues.Pages
             return otherDomain.Equals(Domain);
         }
 
-        public override string? ToString()
-        {
-            return Domain.ToString();
-        }
-
         public void Visit()
         {
             Visited = DateTime.Now;
+        }
+
+        public void Update(Page page)
+        {
+            Created = page.Created;
+            Visited = page.Visited;
+        }
+
+        public void InformError(Exception ex)
+        {
+            MessageErro = ex.Message;
+        }
+
+        public bool HasErro()
+        {
+            return MessageErro != null && !MessageErro.Equals(string.Empty);
+        }
+
+        public override string? ToString()
+        {
+            return Domain.ToString();
         }
 
         public override bool Equals(object? obj)
@@ -60,10 +85,5 @@ namespace Crawlers.Domains.Entities.ObjectValues.Pages
             return HashCode.Combine(Id, Url);
         }
 
-        public void Update(Page page)
-        {
-            Created = page.Created;
-            Visited = page.Visited;
-        }
     }
 }

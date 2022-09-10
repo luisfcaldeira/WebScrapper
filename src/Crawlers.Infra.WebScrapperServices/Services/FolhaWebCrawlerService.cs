@@ -1,4 +1,5 @@
-﻿using Crawlers.Domains.Entities.Articles;
+﻿using Crawlers.Domains.Collections.ObjectValues.Pages;
+using Crawlers.Domains.Entities.Articles;
 using Crawlers.Domains.Entities.ObjectValues.Pages;
 using Crawlers.Domains.Interfaces.Services.WebCrawlerServices;
 using Crawlers.Infra.WebScrapperServices.Interfaces.InnerServices;
@@ -12,12 +13,12 @@ namespace Crawlers.Infra.WebScrapperServices.Services
         {
         }
 
-        public override string GetContent(Page url)
+        public override string? GetContent(Page url)
         {
             var doc = GetDocument(url);
             var divs = doc.DocumentNode.SelectNodes("//div");
             if (divs == null)
-                return String.Empty;
+                return string.Empty;
 
             var nodes = divs.Where(d => d.HasClass("c-news__body")).ToList();
             var result = new StringBuilder();
@@ -38,9 +39,18 @@ namespace Crawlers.Infra.WebScrapperServices.Services
             return DateTime.Parse(strDate);
         }
 
-        public override FolhaArticle GetEntity(Page url)
+        public override FolhaArticle? GetEntity(Page url)
         {
-            return new FolhaArticle(GetTitle(url), GetContent(url), url, GetPublishDate(url), GetReferredPages(url));
+            var referred = GetReferredPages(url);
+
+            var folhaArticle = new FolhaArticle(GetTitle(url), GetContent(url), url, GetPublishDate(url));
+
+            if(referred.Count > 0)
+            {
+                folhaArticle.ReferredPages = new PageCollection(referred, url.Domain);
+            }
+
+            return folhaArticle;
         }
     }
 }

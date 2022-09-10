@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infra", "Infra", "{2BF756A6
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Databases", "Databases", "{79640EFA-96DC-41FD-B7F3-66FFA714A3CE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crawler.Infra.Databases", "src\Infra.Databases\Crawler.Infra.Databases.csproj", "{A29F4249-42A6-4CB8-A8C1-8B1B97345839}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crawlers.Infra.Databases", "src\Infra.Databases\Crawlers.Infra.Databases.csproj", "{A29F4249-42A6-4CB8-A8C1-8B1B97345839}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Crawlers", "Crawlers", "{88F9AB72-BAA9-42F2-936B-850EAC0723E7}"
 EndProject
@@ -59,7 +59,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infra", "Infra", "{B15BB2CF
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{51DC3FAD-5D81-41EE-B9F3-FF58F8FF0C66}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mockers.Contexts.Crawlers.Infra.Services", "src\Mockers.Contexts.Crawlers.Infra.Services\Mockers.Contexts.Crawlers.Infra.Services.csproj", "{4405A2F1-37DB-4CFB-841A-F840FD79C03D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mockers.Contexts.Crawlers.Infra.Services", "src\Mockers.Contexts.Crawlers.Infra.Services\Mockers.Contexts.Crawlers.Infra.Services.csproj", "{4405A2F1-37DB-4CFB-841A-F840FD79C03D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Crawlers", "Crawlers", "{009F5F93-6432-4C3E-9F84-1EAC85D09BF8}"
 EndProject

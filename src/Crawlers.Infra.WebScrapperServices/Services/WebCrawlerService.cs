@@ -22,6 +22,8 @@ namespace Crawlers.Infra.WebScrapperServices.Services
             HtmlDocument doc = GetDocument(url);
             var anchors = doc.DocumentNode.SelectNodes("//a");
             var result = new List<Page>();
+            if(anchors == null)
+                return result;
             foreach (var anchor in anchors)
             {
                 try
@@ -59,6 +61,8 @@ namespace Crawlers.Infra.WebScrapperServices.Services
         {
             var doc = GetDocument(url);
             var metasNodes = doc.DocumentNode.SelectNodes("//head/meta");
+            if (metasNodes == null)
+                return null;
 
             foreach(var node in metasNodes)
             {
@@ -85,8 +89,8 @@ namespace Crawlers.Infra.WebScrapperServices.Services
             return WebNavigator.GetDocument(page);
         }
 
-        public abstract string GetContent(Page url);
+        public abstract string? GetContent(Page url);
 
-        public abstract T GetEntity(Page url);
+        public abstract T? GetEntity(Page url);
     }
 }

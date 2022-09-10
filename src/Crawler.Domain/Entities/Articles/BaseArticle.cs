@@ -1,4 +1,5 @@
-﻿using Crawlers.Domains.Entities.ObjectValues.Pages;
+﻿using Crawlers.Domains.Collections.ObjectValues.Pages;
+using Crawlers.Domains.Entities.ObjectValues.Pages;
 
 namespace Crawlers.Domains.Entities.Articles
 {
@@ -7,26 +8,30 @@ namespace Crawlers.Domains.Entities.Articles
         public int Id { get; set; }
         public string Title { get; protected set; } = string.Empty;
         public string Content { get; protected set; } = string.Empty;
-        public Page Page { get; private set; }
+        public Page? Page { get; private set; } 
         public DateTime? Published { get; protected set; } 
-        public IList<Page> ReferredPages { get; protected set; }
+        public PageCollection? ReferredPages { get; set; }
 
         protected BaseArticle()
         {
         }
 
-        protected BaseArticle(string title, string content, Page url, DateTime? published, IList<Page> referredPages)
+        protected BaseArticle(string title, string content, Page page, DateTime? published)
         {
+            if (CheckIfContentOrTitleExist(content))
+            {
+                throw new ArgumentException($"It was not possible to create an Article from '{page.Url}'.");
+            }
+
             Title = title;
             Content = content;
-            Page = url;
+            Page = page;
             Published = published;
-            ReferredPages = referredPages;
         }
 
-        public IEnumerable<Page>? GetValidPages(Domain domain)
+        private bool CheckIfContentOrTitleExist(string? content)
         {
-            return ReferredPages?.Where(url => url.IsValid(domain)).ToList();
+            return (Title == string.Empty || Title == null) && (content == string.Empty || content == null);
         }
 
         public override bool Equals(object? obj)

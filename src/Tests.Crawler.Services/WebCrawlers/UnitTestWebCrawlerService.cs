@@ -1,16 +1,10 @@
 ﻿using Core.Infra.IoC;
 using Crawlers.Domains.Entities.ObjectValues.Pages;
 using Crawlers.Domains.Interfaces.Services.WebCrawlerServices;
-using Crawlers.Infra.WebScrapperServices.Interfaces.InnerServices;
-using HtmlAgilityPack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mockers.Contexts.Crawlers.Infra.Services;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tests.Crawler.Services.WebCrawlers
 {

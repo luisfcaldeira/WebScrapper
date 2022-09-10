@@ -1,7 +1,7 @@
 ﻿using Core.Infra.IoC;
-using Crawler.Infra.Databases.Context;
-using Crawler.Infra.Databases.DAL;
-using Crawler.Infra.Databases.DAL.Repositories;
+using Crawlers.Infra.Databases.Context;
+using Crawlers.Infra.Databases.DAL;
+using Crawlers.Infra.Databases.DAL.Repositories;
 using Crawlers.Application.Interfaces.Services;
 using Crawlers.Application.Services;
 using Crawlers.Domains.Entities.ObjectValues.Pages;
@@ -40,8 +40,7 @@ namespace ConsoleApp.WebScrapper
             var cancellation = new CancellationTokenSource();
             AddListenerToCancel(cancellation);
 
-            // TODO Identificar se é um artigo válido antes de salvar. 
-            // TODO Protocolos HTTP não estão sendo salvos corretamente no DB. 
+            // TODO Salvar Pages antes de identificar se o artigo é válido. 
             crawler.Scrap(cancellation.Token).Wait();
 
             Console.WriteLine("Finished. Press any key to quit");

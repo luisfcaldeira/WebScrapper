@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Crawler.Infra.Databases.Configs.Pages
+namespace Crawlers.Infra.Databases.Configs.Pages
 {
     internal class PageConfig : IEntityTypeConfiguration<Page>
     {
@@ -17,6 +17,9 @@ namespace Crawler.Infra.Databases.Configs.Pages
                 domain.OwnsOne(d => d.Directory);
                 domain.OwnsOne(d => d.Country);
             });
+
+            builder.Ignore(d => d.Url);
+            builder.HasMany(d => d.PagesCollections);
         }
     }
 }

@@ -5,6 +5,7 @@ using Crawlers.Domains.Interfaces.DAL;
 using Crawlers.Domains.Interfaces.Services.WebCrawlerServices;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -36,39 +37,37 @@ namespace Crawlers.Application.Services
 
         private void ScrapOneIfExists()
         {
-            var url = UnitOfWork.PageRepository.GetOneNotVisited();
-            if (url != null)
+            var page = UnitOfWork.PageRepository.GetOneNotVisited();
+            if (page != null)
             {
-                var currentDomain = url.Domain;
-                var folha = FolhaWebCrawlerService.GetEntity(url);
-                SaveArticle(folha);
-                var newPages = folha.GetValidPages(currentDomain);
-                SaveNewPages(newPages);
-                url.Visit();
-                UnitOfWork.Save();
+                CreateAndSaveArticle(page);
             }
         }
 
-
-        private void SaveNewPages(IEnumerable<Page> pages)
+        private void CreateAndSaveArticle(Page page)
         {
-            foreach(var page in pages)
+            try
             {
-                if(!UnitOfWork.PageRepository.Exists(page))
-                {
-                    UnitOfWork.PageRepository.Add(page);
-                } else
-                {
-                    var pageDb = UnitOfWork.PageRepository.GetPage(page.Url);
-                    pageDb.Update(page);
-                    UnitOfWork.PageRepository.Update(pageDb);
-                }
+                var folha = FolhaWebCrawlerService.GetEntity(page);
+                var newPages = folha.ReferredPages.Pages;
+
+                SaveArticle(folha);
+                SaveNewPages(newPages);
+
+            } catch(Exception ex)
+            {
+                page.InformError(ex);
+                Debug.WriteLine(ex.Message);
             }
+
+            page.Visit();
+
+            UnitOfWork.Save();
         }
 
         private void SaveArticle(FolhaArticle folha)
         {
-            if(!UnitOfWork.FolhaArticleRepository.Exists(folha))
+            if (!UnitOfWork.FolhaArticleRepository.Exists(folha))
             {
                 UnitOfWork.FolhaArticleRepository.Add(folha);
             }
@@ -77,6 +76,17 @@ namespace Crawlers.Application.Services
                 FolhaArticle folhaDb = UnitOfWork.FolhaArticleRepository.GetArticle(folha.Page);
                 folhaDb.Update(folha);
                 UnitOfWork.FolhaArticleRepository.Update(folhaDb);
+            }
+        }
+
+        private void SaveNewPages(IEnumerable<Page> pages)
+        {
+            foreach(var page in pages)
+            {
+                if(!UnitOfWork.PageRepository.Exists(page))
+                {
+                    UnitOfWork.PageRepository.Add(page);
+                }
             }
         }
     }

@@ -24,15 +24,15 @@ namespace Tests.Crawler.Domains.Entities.ObjectValues
             page3.Id = 2;
 
             var folha1 = new FolhaArticle(
-                    "Lorem Ipsum", "Content", page1, DateTime.Today, new List<Page>()
+                    "Lorem Ipsum", "Content", page1, DateTime.Today
                 );
 
             var folha2 = new FolhaArticle(
-                    "Lorem Ipsum", "Content", page2, DateTime.Today, new List<Page>()
+                    "Lorem Ipsum", "Content", page2, DateTime.Today
                 );
 
             var folha3 = new FolhaArticle(
-                    "Lorem Ipsum 1", "Content 123" , page3, DateTime.Today, new List<Page>()
+                    "Lorem Ipsum 1", "Content 123" , page3, DateTime.Today
                 );
 
             folha1.Id = 1;

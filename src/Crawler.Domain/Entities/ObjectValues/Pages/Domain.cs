@@ -19,6 +19,11 @@
             TopLevel = topLevel;
         }
 
+        public string FullUrl()
+        {
+            return $"{Protocol}{Subdomain}{Name}.{TopLevel}{Country}{Directory}";
+        }
+
         public override bool Equals(object? obj)
         {
             return obj is Domain domain &&
@@ -34,7 +39,8 @@
 
         public override string? ToString()
         {
-            return $"{Protocol}{Subdomain}{Name}.{TopLevel}{Country}{Directory}";
+            return FullUrl();
         }
+
     }
 }

@@ -114,5 +114,23 @@ namespace Tests.Crawler.Domains.Entities.ObjectValues
             Assert.AreEqual("www", url1.Domain.Subdomain.Value);
             Assert.AreEqual("www", url3.Domain.Subdomain.Value);
         }
+
+        [TestMethod]
+        public void TestIfUrlIsSavedCorrectly()
+        {
+            string strUrl = "//assinaturas.folha.com.br/";
+            var url1 = PageCreator.Create(strUrl);
+
+            Assert.AreEqual("http:" + strUrl, url1.Url);
+
+            string strUrl2 = "assinaturas.folha.com.br/";
+            var url2 = PageCreator.Create(strUrl2);
+
+            Assert.AreEqual("http://" + strUrl2, url2.Url);
+
+            string strUrl3 = "//paywall.folha.uol.com.br/folha/login?return_url=https://www1.folha.uol.com.br/poder/2022/08/lula-informa-ao-tse-ter-criado-redes-sociais-direcionadas-a-evangelicos.shtml";
+            var url3 = PageCreator.Create(strUrl3);
+            Assert.AreEqual("http:" + strUrl3, url3.Url);
+        }
     }
 }

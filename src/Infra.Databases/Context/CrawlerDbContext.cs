@@ -1,9 +1,8 @@
-﻿using Crawler.Infra.Databases.Configs.Pages;
-using Crawlers.Domains.Entities.Articles;
-using Crawlers.Domains.Entities.ObjectValues.Pages;
+﻿using Crawlers.Domains.Entities.Articles;
+using Crawlers.Infra.Databases.Configs.Pages;
 using Microsoft.EntityFrameworkCore;
 
-namespace Crawler.Infra.Databases.Context
+namespace Crawlers.Infra.Databases.Context
 {
     public class CrawlerDbContext : DbContext
     {
@@ -33,6 +32,7 @@ namespace Crawler.Infra.Databases.Context
 
             modelBuilder.ApplyConfiguration(new PageConfig());
             modelBuilder.ApplyConfiguration(new ArticleConfig());
+            modelBuilder.ApplyConfiguration(new Configs.Collections.ObjectValues.PageCollectionConfig());
         }
     }
 }

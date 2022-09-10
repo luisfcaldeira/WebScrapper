@@ -1,6 +1,6 @@
-﻿using Crawler.Infra.Databases.Context;
-using Crawler.Infra.Databases.DAL;
-using Crawler.Infra.Databases.DAL.Repositories;
+﻿using Crawlers.Infra.Databases.Context;
+using Crawlers.Infra.Databases.DAL;
+using Crawlers.Infra.Databases.DAL.Repositories;
 using Crawlers.Application.Interfaces.Services;
 using Crawlers.Application.Services;
 using Crawlers.Domains.Interfaces.DAL;

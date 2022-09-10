@@ -6,7 +6,7 @@ namespace Crawlers.Domains.Entities.Articles
     {
         protected FolhaArticle() : base() { }
 
-        public FolhaArticle(string title, string content, Page url, DateTime? published, IList<Page> urls) : base(title, content, url, published, urls)
+        public FolhaArticle(string? title, string? content, Page url, DateTime? published) : base(title, content, url, published)
         {
         }
 
