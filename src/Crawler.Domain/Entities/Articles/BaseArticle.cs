@@ -11,6 +11,7 @@ namespace Crawlers.Domains.Entities.Articles
         public Page? Page { get; private set; } 
         public DateTime? Published { get; protected set; } 
         public PageCollection? ReferredPages { get; set; }
+        public bool IsValid { get; private set; } = false;
 
         protected BaseArticle()
         {
@@ -18,20 +19,20 @@ namespace Crawlers.Domains.Entities.Articles
 
         protected BaseArticle(string title, string content, Page page, DateTime? published)
         {
-            if (CheckIfContentOrTitleExist(content))
-            {
-                throw new ArgumentException($"It was not possible to create an Article from '{page.Url}'.");
-            }
-
             Title = title;
             Content = content;
             Page = page;
             Published = published;
+
+            if (CheckIfContentOrTitleExist(title, content))
+            {
+                IsValid = true;
+            }
         }
 
-        private bool CheckIfContentOrTitleExist(string? content)
+        private bool CheckIfContentOrTitleExist(string? title, string? content)
         {
-            return (Title == string.Empty || Title == null) && (content == string.Empty || content == null);
+            return title != string.Empty && title != null && content != string.Empty && content != null;
         }
 
         public override bool Equals(object? obj)

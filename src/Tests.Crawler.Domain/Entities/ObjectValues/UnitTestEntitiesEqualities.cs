@@ -9,9 +9,42 @@ using System.Threading.Tasks;
 
 namespace Tests.Crawler.Domains.Entities.ObjectValues
 {
+
+    
     [TestClass]
     public class UnitTestEntitiesEqualities
     {
+        [TestMethod]
+        public void TestIfCreateValidArticle()
+        {
+            var page1 = PageCreator.Create("http://domain.com");
+            var folha1 = new FolhaArticle(
+                    "Lorem Ipsum", "Content", page1, DateTime.Today
+                );
+
+            Assert.IsTrue(folha1.IsValid);
+        }
+
+        [TestMethod]
+        public void TestIfCreateInvalidArticle()
+        {
+            var page1 = PageCreator.Create("http://domain.com");
+            var folha1 = new FolhaArticle(
+                    string.Empty, string.Empty, page1, DateTime.Today
+                );
+
+            var folha2 = new FolhaArticle(
+                    "Title", string.Empty, page1, DateTime.Today
+                );
+
+            var folha3 = new FolhaArticle(
+                    string.Empty, "Content", page1, DateTime.Today
+                );
+            Assert.IsFalse(folha1.IsValid);
+            Assert.IsFalse(folha2.IsValid);
+            Assert.IsFalse(folha3.IsValid);
+        }
+
         [TestMethod]
         public void TestIfFolhaArticleIsEqualsAnother()
         {

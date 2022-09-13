@@ -48,11 +48,15 @@ namespace Crawlers.Application.Services
         {
             try
             {
-                var folha = FolhaWebCrawlerService.GetEntity(page);
-                var newPages = folha.ReferredPages.Pages;
+                Console.WriteLine($"Accessing: '{page.RawUrl}'");
 
-                SaveArticle(folha);
+                var newPages = FolhaWebCrawlerService.GetReferredPages(page);
                 SaveNewPages(newPages);
+                
+                var folha = FolhaWebCrawlerService.GetEntity(page);
+
+                if(folha.IsValid)
+                    SaveArticle(folha);
 
             } catch(Exception ex)
             {
