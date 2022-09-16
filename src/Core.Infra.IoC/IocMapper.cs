@@ -14,6 +14,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mockers.Contexts.Crawlers.Infra.Services;
+using Core.Infra.Services.Observers.Interfaces;
+using Core.Infra.Services.Observers;
 
 namespace Core.Infra.IoC
 {
@@ -45,7 +47,11 @@ namespace Core.Infra.IoC
                     .AddTransient<IWebCrawlerFolhaAppService, WebCrawlerFolhaAppService>()
                     .AddTransient<IFolhaWebCrawlerService, FolhaWebCrawlerService>()
                     .AddTransient((provider) => new HtmlWeb())
-                    .AddTransient<IUnitOfWork, UnitOfWork>();
+                    .AddTransient<IUnitOfWork, UnitOfWork>()
+                    .AddSingleton<IEventManager>(provider => {
+                        var eventManager = new EventManager();
+                        return eventManager;
+                    });
 
                     if(mockWebNavigator)
                     {

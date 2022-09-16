@@ -16,6 +16,8 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Core.Infra.Services.Observers.Interfaces;
+using ConsoleApp.WebScrapper.InnerServices.Listeners;
 
 namespace ConsoleApp.WebScrapper
 {
@@ -27,6 +29,8 @@ namespace ConsoleApp.WebScrapper
             var iocMapper = new IocMapper();
 
             var unitOfWork = iocMapper.GetService<IUnitOfWork>();
+            var eventManager = iocMapper.GetService<IEventManager>();
+            eventManager.Attach(new LogMessageEventListener());
 
             var strUrl = "https://www1.folha.uol.com.br/poder/2022/08/lula-informa-ao-tse-ter-criado-redes-sociais-direcionadas-a-evangelicos.shtml";
 
@@ -39,8 +43,8 @@ namespace ConsoleApp.WebScrapper
             var crawler = iocMapper.GetService<IWebCrawlerFolhaAppService>();
             var cancellation = new CancellationTokenSource();
             AddListenerToCancel(cancellation);
-
-            // TODO Salvar Pages antes de identificar se o artigo é válido. 
+            // TODO registrar o EventManager como singleton?
+            // TODO criar entidades concretas para implementar os listeners
             crawler.Scrap(cancellation.Token).Wait();
 
             Console.WriteLine("Finished. Press any key to quit");
