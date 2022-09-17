@@ -2,6 +2,7 @@
 using Core.Infra.Services.Observers.Interfaces;
 using Core.Infra.Services.Observers.Interfaces.Messages;
 using System;
+using System.Diagnostics;
 
 namespace ConsoleApp.WebScrapper.InnerServices.Listeners
 {
@@ -12,6 +13,11 @@ namespace ConsoleApp.WebScrapper.InnerServices.Listeners
         protected void Write(IMessage message)
         {
             Console.WriteLine($"[{message.Tag}] '{message.Description}'");
+        }
+
+        protected void Log(IMessage message)
+        {
+            Debug.WriteLine($"[{message.Tag}] '{message.Description}'");
         }
 
         public virtual void Update(IMessage message)

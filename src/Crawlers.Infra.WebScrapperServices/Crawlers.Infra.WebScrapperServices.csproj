@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Core.Infra.Services\Core.Infra.Services.csproj" />
     <ProjectReference Include="..\Crawler.Domain\Crawlers.Domains.csproj" />
   </ItemGroup>
 

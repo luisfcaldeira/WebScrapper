@@ -1,21 +1,24 @@
-﻿using Crawlers.Domains.Entities.ObjectValues.Pages;
+﻿using Core.Infra.Services.Observers.Entities.Messages;
+using Core.Infra.Services.Observers.Interfaces;
+using Crawlers.Domains.Entities.ObjectValues.Pages;
 using Crawlers.Domains.Interfaces.Services.WebCrawlerServices;
 using Crawlers.Infra.WebScrapperServices.Interfaces.InnerServices;
 using HtmlAgilityPack;
-using System.Diagnostics;
 using System.Text;
 
 namespace Crawlers.Infra.WebScrapperServices.Services
 {
     public abstract class WebCrawlerService<T> : IWebCrawlerService<T> where T : class
     {
+        protected IEventManager EventManager { get; }
 
-        public WebCrawlerService(IWebNavigator webNavigator)
+        public WebCrawlerService(IWebNavigator webNavigator, IEventManager eventManager)
         {
-            WebNavigator = webNavigator;
+            _webNavigator = webNavigator;
+            EventManager = eventManager;
         }
 
-        private IWebNavigator WebNavigator { get; }
+        private IWebNavigator _webNavigator { get; }
 
         public IList<Page> GetReferredPages(Page url)
         {
@@ -32,7 +35,8 @@ namespace Crawlers.Infra.WebScrapperServices.Services
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"I couldn't reconize an anchor: [{ex.Message}]");
+                    string message = $"I couldn't reconize an anchor: [{ex.Message}]";
+                    EventManager.Notify(new Message(Tag.Warning, message));
                 }
             }
 
@@ -86,7 +90,7 @@ namespace Crawlers.Infra.WebScrapperServices.Services
 
         protected HtmlDocument GetDocument(Page page)
         {
-            return WebNavigator.GetDocument(page);
+            return _webNavigator.GetDocument(page);
         }
 
         public abstract string? GetContent(Page url);

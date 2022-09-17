@@ -4,6 +4,7 @@
     {
         LogMessage,
         Error,
+        Warning,
         Evolution,
     }
 }

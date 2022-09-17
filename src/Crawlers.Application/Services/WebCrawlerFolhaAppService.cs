@@ -1,6 +1,5 @@
 ﻿using Core.Infra.Services.Observers.Entities.Messages;
 using Core.Infra.Services.Observers.Interfaces;
-using Crawlers.Application.InnerServices.Observers.Listeners;
 using Crawlers.Application.Interfaces.Services;
 using Crawlers.Domains.Entities.Articles;
 using Crawlers.Domains.Entities.ObjectValues.Pages;
@@ -26,6 +25,7 @@ namespace Crawlers.Application.Services
         private IUnitOfWork UnitOfWork;
         private IFolhaWebCrawlerService FolhaWebCrawlerService;
         private readonly IEventManager eventManager;
+        private int counter = 0;
 
         public async Task Scrap(CancellationToken cancellationToken)
         {
@@ -33,7 +33,7 @@ namespace Crawlers.Application.Services
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    eventManager.Notify(new Message(Tag.LogMessage, "stopped"));
+                    eventManager.Notify(new Message(Tag.Error, "stopped"));
                     return;
                 }
                 ScrapOneIfExists();
@@ -53,7 +53,7 @@ namespace Crawlers.Application.Services
         {
             try
             {
-                eventManager.Notify(new Message(Tag.LogMessage, $"Accessing: '{page.RawUrl}'"));
+                eventManager.Notify(new Message(Tag.LogMessage, $"Accessing #{counter} url: '{page.RawUrl}' "));
 
                 var newPages = FolhaWebCrawlerService.GetReferredPages(page);
                 SaveNewPages(newPages);
@@ -62,6 +62,8 @@ namespace Crawlers.Application.Services
 
                 if(folha.IsValid)
                     SaveArticle(folha);
+
+                counter++;
 
             } catch(Exception ex)
             {

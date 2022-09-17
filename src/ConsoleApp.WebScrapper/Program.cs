@@ -31,6 +31,7 @@ namespace ConsoleApp.WebScrapper
             var unitOfWork = iocMapper.GetService<IUnitOfWork>();
             var eventManager = iocMapper.GetService<IEventManager>();
             eventManager.Attach(new LogMessageEventListener());
+            eventManager.Attach(new LogErrorEventListener());
 
             var strUrl = "https://www1.folha.uol.com.br/poder/2022/08/lula-informa-ao-tse-ter-criado-redes-sociais-direcionadas-a-evangelicos.shtml";
 
@@ -55,7 +56,6 @@ namespace ConsoleApp.WebScrapper
         {
             Console.CancelKeyPress += (sender, eventArgs) =>
             {
-                Console.WriteLine("Cancel event triggered");
                 cancellation.Cancel();
                 eventArgs.Cancel = true;
             };

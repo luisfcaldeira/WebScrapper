@@ -1,4 +1,5 @@
-﻿using Crawlers.Domains.Collections.ObjectValues.Pages;
+﻿using Core.Infra.Services.Observers.Interfaces;
+using Crawlers.Domains.Collections.ObjectValues.Pages;
 using Crawlers.Domains.Entities.Articles;
 using Crawlers.Domains.Entities.ObjectValues.Pages;
 using Crawlers.Domains.Interfaces.Services.WebCrawlerServices;
@@ -9,7 +10,8 @@ namespace Crawlers.Infra.WebScrapperServices.Services
 {
     public class FolhaWebCrawlerService : WebCrawlerService<FolhaArticle>, IFolhaWebCrawlerService
     {
-        public FolhaWebCrawlerService(IWebNavigator webNavigator) : base(webNavigator)
+
+        public FolhaWebCrawlerService(IWebNavigator webNavigator, IEventManager eventManage) : base(webNavigator, eventManage)
         {
         }
 
