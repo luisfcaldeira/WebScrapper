@@ -29,7 +29,7 @@ namespace Crawlers.Application.Services.Async
 
             for(int i = 0; i < _threadCount; i++)
             {
-                tasks[i] = taskFactory.StartNew(async () => {
+                tasks[i] = taskFactory.StartNew(() => {
                     var counter = new ThreadCounter();
                     var service = _provider.GetService<IWebCrawlerFolhaAppService>();
                     while(true)

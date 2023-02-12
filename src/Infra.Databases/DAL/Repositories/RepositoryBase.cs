@@ -15,17 +15,20 @@ namespace Crawlers.Infra.Databases.DAL.Repositories
             DbSet = dbContext.Set<T>();
         }
 
-        public void Add(T entity)
+        public async void Add(T entity)
         {
-            DbContext.AddAsync(entity);
+            await DbContext.AddAsync(entity);
         }
 
-        public void AddRange(IEnumerable<T> entities)
+        public async void AddRange(IEnumerable<T> entities)
         {
-            foreach (T entity in entities)
+            await Task.Run(() =>
             {
-                Add(entity);
-            }
+                foreach (T entity in entities)
+                {
+                    Add(entity);
+                }
+            });
         }
 
         public IEnumerable<T> GetAll()
@@ -33,7 +36,7 @@ namespace Crawlers.Infra.Databases.DAL.Repositories
             return DbSet.ToListAsync().Result;
         }
 
-        public T GetById(object id)
+        public T? GetById(object id)
         {
             return DbSet.FindAsync(id).Result;
         }

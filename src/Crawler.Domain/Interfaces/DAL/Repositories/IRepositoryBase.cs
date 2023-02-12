@@ -2,10 +2,10 @@
 {
     public interface IRepositoryBase<T> : IDisposable
     {
-        public IEnumerable<T> GetAll();
-        public T GetById(object id);
-        public void Add(T entity);
+        IEnumerable<T> GetAll();
+        T? GetById(object id);
+        void Add(T entity);
         void AddRange(IEnumerable<T> entities);
-        public void Update(T entity);
+        void Update(T entity);
     }
 }
