@@ -20,7 +20,7 @@ namespace Crawlers.Domains.Entities.Articles
         protected BaseArticle(string title, string content, Page page, DateTime? published)
         {
             Title = title;
-            Content = content;
+            Content = ClearContent(content);
             Page = page;
             Published = published;
 
@@ -28,6 +28,22 @@ namespace Crawlers.Domains.Entities.Articles
             {
                 IsValid = true;
             }
+        }
+
+        private string ClearContent(string content) 
+        {
+            var newContent = content
+                .Replace("  ", "")
+                .Replace("\t", "")
+                .Replace("\n", "");
+
+            if (newContent.Contains("  ")
+                || newContent.Contains("\t")
+                || newContent.Contains("\n")
+                )
+                return ClearContent(newContent);
+
+            return newContent;
         }
 
         private bool CheckIfContentOrTitleExist(string? title, string? content)

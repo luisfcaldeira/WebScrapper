@@ -24,9 +24,14 @@ namespace Crawlers.Infra.WebScrapperServices.Services
         {
             HtmlDocument doc = GetDocument(page);
             var anchors = doc.DocumentNode.SelectNodes($"//a");
+            return ConvertAnchorsIntoPages(anchors);
+        }
+
+        protected IList<Page> ConvertAnchorsIntoPages(HtmlNodeCollection anchors)
+        {
             var result = new List<Page>();
 
-            if(anchors == null)
+            if (anchors == null)
                 return result;
 
             foreach (var anchor in anchors)

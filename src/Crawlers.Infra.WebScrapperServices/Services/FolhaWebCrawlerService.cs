@@ -4,6 +4,7 @@ using Crawlers.Domains.Entities.Articles;
 using Crawlers.Domains.Entities.ObjectValues.Pages;
 using Crawlers.Domains.Interfaces.Services.WebCrawlerServices;
 using Crawlers.Infra.WebScrapperServices.Interfaces.InnerServices;
+using HtmlAgilityPack;
 using System.Text;
 
 namespace Crawlers.Infra.WebScrapperServices.Services
@@ -55,9 +56,16 @@ namespace Crawlers.Infra.WebScrapperServices.Services
             return folhaArticle;
         }
 
-        public override IList<Page> GetReferredPages(Page url)
+        public override IList<Page> GetReferredPages(Page page)
         {
-            return base.GetReferredPages(url);
+            HtmlDocument doc = GetDocument(page);
+            var anchors = doc.DocumentNode.SelectNodes($"//div[contains(@class, 'c-news__content')]//a");
+
+            if(anchors != null && anchors.Count() > 0) { 
+                return ConvertAnchorsIntoPages(anchors);
+            }
+
+            return new List<Page>();
         }
     }
 }

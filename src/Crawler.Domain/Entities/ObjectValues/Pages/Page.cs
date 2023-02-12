@@ -11,10 +11,10 @@ namespace Crawlers.Domains.Entities.ObjectValues.Pages
         public DateTime? Visited { get; private set; }
         public ICollection<BaseArticle> Articles{ get; set; }
         public string? MessageErro { get; private set; }
-        public string RawUrl { get; internal set; }
+        public string? RawUrl { get; internal set; }
         public ICollection<PageCollection> PagesCollections { get; set; }
 
-        public byte[] ConcurrencyToken { get; set; }
+        public byte[]? ConcurrencyToken { get; set; }
         public int TaskCode { get; set; } = -1;
 
         public string Url 
@@ -36,9 +36,11 @@ namespace Crawlers.Domains.Entities.ObjectValues.Pages
 
         protected Page()
         {
+            Articles = new List<BaseArticle>();
+            PagesCollections = new List<PageCollection>();
         }
 
-        public Page(Domain domain)
+        public Page(Domain domain) : this()
         {
             Domain = domain;
         }

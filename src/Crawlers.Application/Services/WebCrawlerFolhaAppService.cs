@@ -7,8 +7,6 @@ using Crawlers.Domains.Interfaces.DAL;
 using Crawlers.Domains.Interfaces.Services.WebCrawlerServices;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 
 namespace Crawlers.Application.Services
 {
