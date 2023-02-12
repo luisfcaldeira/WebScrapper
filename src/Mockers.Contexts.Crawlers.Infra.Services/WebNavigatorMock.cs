@@ -8,6 +8,10 @@ namespace Mockers.Contexts.Crawlers.Infra.Services
     {
         public string Html { get; set; } = string.Empty;
 
+        public void Dispose()
+        {
+        }
+
         public HtmlDocument GetDocument(Page page)
         {
             var htmlDocument = new HtmlDocument();

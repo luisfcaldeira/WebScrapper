@@ -3,7 +3,7 @@ using HtmlAgilityPack;
 
 namespace Crawlers.Infra.WebScrapperServices.Interfaces.InnerServices
 {
-    public interface IWebNavigator
+    public interface IWebNavigator : IDisposable
     {
         HtmlDocument GetDocument(Page page);
     }

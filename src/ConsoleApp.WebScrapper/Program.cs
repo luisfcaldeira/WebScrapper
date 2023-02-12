@@ -18,6 +18,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Core.Infra.Services.Observers.Interfaces;
 using ConsoleApp.WebScrapper.InnerServices.Listeners;
+using Crawlers.Application.Interfaces.Services.Async;
 
 namespace ConsoleApp.WebScrapper
 {
@@ -25,11 +26,10 @@ namespace ConsoleApp.WebScrapper
     {
         public static void Main()
         {
-
             var iocMapper = new IocMapper();
 
-            var unitOfWork = iocMapper.GetService<IUnitOfWork>();
-            var eventManager = iocMapper.GetService<IEventManager>();
+            var unitOfWork = iocMapper.Get<IUnitOfWork>();
+            var eventManager = iocMapper.Get<IEventManager>();
             eventManager.Attach(new LogMessageEventListener());
             eventManager.Attach(new LogErrorEventListener());
 
@@ -41,12 +41,11 @@ namespace ConsoleApp.WebScrapper
                 unitOfWork.Save();
             }
 
-            var crawler = iocMapper.GetService<IWebCrawlerFolhaAppService>();
+            var crawler = iocMapper.Get<IWebCrawlerFolhaAppAsyncService>();
             var cancellation = new CancellationTokenSource();
             AddListenerToCancel(cancellation);
-            // TODO registrar o EventManager como singleton?
-            // TODO criar entidades concretas para implementar os listeners
-            crawler.Scrap(cancellation.Token).Wait();
+            // TODO fazer override do método GetReferredPages em FolhaWebCrawlerService para capturar somente as urls dentro do corpo do texto.
+            crawler.Scrap(cancellation.Token);
 
             Console.WriteLine("Finished. Press any key to quit");
             Console.ReadKey();

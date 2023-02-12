@@ -1,6 +1,7 @@
 ﻿using Core.Infra.Services.Observers.Entities.Messages;
 using Core.Infra.Services.Observers.Interfaces;
 using Core.Infra.Services.Observers.Interfaces.Messages;
+using System;
 
 namespace ConsoleApp.WebScrapper.InnerServices.Listeners
 {
@@ -10,7 +11,14 @@ namespace ConsoleApp.WebScrapper.InnerServices.Listeners
 
         public override void Update(IMessage message)
         {
+            var beforeColor = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+
+            Write(message);
             Log(message);
+
+
+            Console.ForegroundColor = beforeColor;
         }
     }
 }

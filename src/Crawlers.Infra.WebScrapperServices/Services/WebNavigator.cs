@@ -13,6 +13,10 @@ namespace Crawlers.Infra.WebScrapperServices.Services
             this.htmlWeb = htmlWeb;
         }
 
+        public void Dispose()
+        {
+        }
+
         public HtmlDocument GetDocument(Page page)
         {
             return htmlWeb.Load(page.Url);

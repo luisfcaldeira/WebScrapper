@@ -13,6 +13,10 @@ namespace Crawlers.Domains.Entities.ObjectValues.Pages
         public string? MessageErro { get; private set; }
         public string RawUrl { get; internal set; }
         public ICollection<PageCollection> PagesCollections { get; set; }
+
+        public byte[] ConcurrencyToken { get; set; }
+        public int TaskCode { get; set; } = -1;
+
         public string Url 
         { 
             get

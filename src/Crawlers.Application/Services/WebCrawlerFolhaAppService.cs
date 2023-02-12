@@ -8,8 +8,7 @@ using Crawlers.Domains.Interfaces.Services.WebCrawlerServices;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Linq;
 
 namespace Crawlers.Application.Services
 {
@@ -19,41 +18,44 @@ namespace Crawlers.Application.Services
         {
             UnitOfWork = unitOfWork;
             FolhaWebCrawlerService = folhaWebCrawlerService;
-            this.eventManager = eventManager;
+            _eventManager = eventManager;
         }
 
         private IUnitOfWork UnitOfWork;
         private IFolhaWebCrawlerService FolhaWebCrawlerService;
-        private readonly IEventManager eventManager;
-        private int counter = 0;
+        private readonly IEventManager _eventManager;
 
-        public async Task Scrap(CancellationToken cancellationToken)
+        public void Scrap(int taskCode)
         {
-            while (true)
-            {
-                if (cancellationToken.IsCancellationRequested)
-                {
-                    eventManager.Notify(new Message(Tag.Error, "stopped"));
-                    return;
-                }
-                ScrapOneIfExists();
-            }
+            ScrapOneIfExists(taskCode);
         }
 
-        private void ScrapOneIfExists()
+        private void ScrapOneIfExists(int taskCode)
         {
             var page = UnitOfWork.PageRepository.GetOneNotVisited();
             if (page != null)
             {
-                CreateAndSaveArticle(page);
+                _eventManager.Notify(new Message(Tag.Evolution, "Página encontrada... "));
+                TakeItToMe(page, taskCode);
+
+                if(page.TaskCode == taskCode)
+                {
+                    CreateAndSaveArticle(page, taskCode);
+                }
             }
         }
 
-        private void CreateAndSaveArticle(Page page)
+        private void TakeItToMe(Page page, int taskCode)
+        {
+            page.TaskCode = taskCode;
+            UnitOfWork.Save();
+        }
+
+        private void CreateAndSaveArticle(Page page, int taskCode)
         {
             try
             {
-                eventManager.Notify(new Message(Tag.LogMessage, $"Accessing #{counter} url: '{page.RawUrl}' "));
+                _eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - Accessing #{page.Id} url: '{page.RawUrl}' "));
 
                 var newPages = FolhaWebCrawlerService.GetReferredPages(page);
                 SaveNewPages(newPages);
@@ -63,17 +65,27 @@ namespace Crawlers.Application.Services
                 if(folha.IsValid)
                     SaveArticle(folha);
 
-                counter++;
-
             } catch(Exception ex)
             {
                 page.InformError(ex);
-                Debug.WriteLine(ex.Message);
+                _eventManager.Notify(new Message(Tag.Error, ex.Message));
             }
 
             page.Visit();
 
+            _eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - Saving in db..."));
             UnitOfWork.Save();
+        }
+
+        private void SaveNewPages(IEnumerable<Page> pages)
+        {
+            foreach (var page in pages)
+            {
+                if (!UnitOfWork.PageRepository.Exists(page))
+                {
+                    UnitOfWork.PageRepository.Add(page);
+                }
+            }
         }
 
         private void SaveArticle(FolhaArticle folha)
@@ -90,15 +102,11 @@ namespace Crawlers.Application.Services
             }
         }
 
-        private void SaveNewPages(IEnumerable<Page> pages)
+        public void Dispose()
         {
-            foreach(var page in pages)
-            {
-                if(!UnitOfWork.PageRepository.Exists(page))
-                {
-                    UnitOfWork.PageRepository.Add(page);
-                }
-            }
+            UnitOfWork.Dispose();
+            FolhaWebCrawlerService.Dispose();
+            _eventManager.Dispose();
         }
     }
 }

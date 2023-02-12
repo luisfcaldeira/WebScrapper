@@ -54,5 +54,10 @@ namespace Crawlers.Infra.WebScrapperServices.Services
 
             return folhaArticle;
         }
+
+        public override IList<Page> GetReferredPages(Page url)
+        {
+            return base.GetReferredPages(url);
+        }
     }
 }

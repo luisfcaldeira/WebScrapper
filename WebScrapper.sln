@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.1.32210.238
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.33214.272
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Consoles", "Consoles", "{14009178-075D-478A-AC48-D55FAB51F0E5}"
 EndProject
@@ -69,7 +69,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp.Patterns.Observe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{3DE7A87D-CF92-4FDC-9B9A-7CFF65FC34F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Infra.Services", "src\Core.Infra.Services\Core.Infra.Services.csproj", "{ABB3D8E2-B05A-451F-B4C0-480ADD584044}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Infra.Services", "src\Core.Infra.Services\Core.Infra.Services.csproj", "{ABB3D8E2-B05A-451F-B4C0-480ADD584044}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DocsExamples", "DocsExamples", "{24EE462E-DDC4-4276-B24B-80F72D2A6616}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp.DocsExcamples.Multhread", "src\ConsoleApp.DocsExcamples.Multhread\ConsoleApp.DocsExcamples.Multhread.csproj", "{962F9964-D2A1-41EA-B39D-3F95BFF720C8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Multithreads", "Multithreads", "{D516CAE2-5F5F-41DB-90B6-C9BF8FC1F963}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp.Multithread.DbInteractions", "src\ConsoleApp.Multithread.DbInteractions\ConsoleApp.Multithread.DbInteractions.csproj", "{7550D39A-0886-4EBF-B563-E4A928D2878B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DB", "DB", "{D8E73319-6E0E-48CE-9BC3-4AE24C7E5309}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infra", "Infra", "{DF14DC06-4FE6-45BA-AFBF-B6B108AD825C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -121,6 +133,14 @@ Global
 		{ABB3D8E2-B05A-451F-B4C0-480ADD584044}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABB3D8E2-B05A-451F-B4C0-480ADD584044}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABB3D8E2-B05A-451F-B4C0-480ADD584044}.Release|Any CPU.Build.0 = Release|Any CPU
+		{962F9964-D2A1-41EA-B39D-3F95BFF720C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{962F9964-D2A1-41EA-B39D-3F95BFF720C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{962F9964-D2A1-41EA-B39D-3F95BFF720C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{962F9964-D2A1-41EA-B39D-3F95BFF720C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7550D39A-0886-4EBF-B563-E4A928D2878B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7550D39A-0886-4EBF-B563-E4A928D2878B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7550D39A-0886-4EBF-B563-E4A928D2878B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7550D39A-0886-4EBF-B563-E4A928D2878B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -156,6 +176,12 @@ Global
 		{328270C8-3C0B-4D15-B8D7-94F7DE809907} = {AB924A23-9D00-45D5-9853-87DFE073A2D9}
 		{3DE7A87D-CF92-4FDC-9B9A-7CFF65FC34F6} = {8EFEB6C9-2B88-4514-A404-8A8AFC103697}
 		{ABB3D8E2-B05A-451F-B4C0-480ADD584044} = {3DE7A87D-CF92-4FDC-9B9A-7CFF65FC34F6}
+		{24EE462E-DDC4-4276-B24B-80F72D2A6616} = {14009178-075D-478A-AC48-D55FAB51F0E5}
+		{962F9964-D2A1-41EA-B39D-3F95BFF720C8} = {D516CAE2-5F5F-41DB-90B6-C9BF8FC1F963}
+		{D516CAE2-5F5F-41DB-90B6-C9BF8FC1F963} = {24EE462E-DDC4-4276-B24B-80F72D2A6616}
+		{7550D39A-0886-4EBF-B563-E4A928D2878B} = {D8E73319-6E0E-48CE-9BC3-4AE24C7E5309}
+		{D8E73319-6E0E-48CE-9BC3-4AE24C7E5309} = {DF14DC06-4FE6-45BA-AFBF-B6B108AD825C}
+		{DF14DC06-4FE6-45BA-AFBF-B6B108AD825C} = {D516CAE2-5F5F-41DB-90B6-C9BF8FC1F963}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4B636D73-3C88-43D2-B80B-F570E9CB6E10}

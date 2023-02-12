@@ -17,7 +17,7 @@ namespace Crawlers.Infra.Databases.DAL.Repositories
 
         public void Add(T entity)
         {
-            DbContext.Add(entity);
+            DbContext.AddAsync(entity);
         }
 
         public void AddRange(IEnumerable<T> entities)
@@ -30,17 +30,17 @@ namespace Crawlers.Infra.Databases.DAL.Repositories
 
         public IEnumerable<T> GetAll()
         {
-            return DbSet.ToList();
+            return DbSet.ToListAsync().Result;
         }
 
         public T GetById(object id)
         {
-            return DbSet.Find(id);
+            return DbSet.FindAsync(id).Result;
         }
 
         public void Delete(object id)
         {
-            var entityToDelete = DbSet.Find(id);
+            var entityToDelete = DbSet.FindAsync(id).Result;
             if(entityToDelete != null)
                 Delete(entityToDelete);
         }

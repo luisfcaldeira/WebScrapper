@@ -1,10 +1,9 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace Crawlers.Application.Interfaces.Services
 {
-    public interface IWebCrawlerFolhaAppService
+    public interface IWebCrawlerFolhaAppService : IDisposable
     {
-        Task Scrap(CancellationToken cancellationToken);
+        void Scrap(int taskCode);
     }
 }

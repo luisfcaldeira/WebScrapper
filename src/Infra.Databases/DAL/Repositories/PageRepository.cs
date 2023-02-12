@@ -1,12 +1,12 @@
 ﻿using Crawlers.Domains.Entities.ObjectValues.Pages;
 using Crawlers.Domains.Interfaces.DAL.Repositories;
-using Microsoft.EntityFrameworkCore;
+using Crawlers.Infra.Databases.Context;
 
 namespace Crawlers.Infra.Databases.DAL.Repositories
 {
     public class PageRepository : RepositoryBase<Page>, IPageRepository
     {
-        public PageRepository(DbContext dbContext) : base(dbContext)
+        public PageRepository(CrawlerDbContext dbContext) : base(dbContext)
         {
         }
 
@@ -23,7 +23,7 @@ namespace Crawlers.Infra.Databases.DAL.Repositories
         public Page? GetOneNotVisited()
         {
             var all = GetAll();
-            return all.Where(u => !u.IsVisited).FirstOrDefault();
+            return all.Where(u => !u.IsVisited).OrderBy(r => Guid.NewGuid()).FirstOrDefault();
         }
 
         public bool Exists(Page page)

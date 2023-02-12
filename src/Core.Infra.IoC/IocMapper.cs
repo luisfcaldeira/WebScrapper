@@ -16,6 +16,9 @@ using Microsoft.Extensions.Hosting;
 using Mockers.Contexts.Crawlers.Infra.Services;
 using Core.Infra.Services.Observers.Interfaces;
 using Core.Infra.Services.Observers;
+using Crawlers.Application.Services.Async;
+using Crawlers.Application.Interfaces.Services.Async;
+using Microsoft.Extensions.Logging;
 
 namespace Core.Infra.IoC
 {
@@ -24,6 +27,7 @@ namespace Core.Infra.IoC
         private IServiceProvider _services;
         private IServiceProvider _provider;
         private bool mockWebNavigator;
+        private int totalThreads;
 
         public IocMapper()
         {
@@ -39,19 +43,29 @@ namespace Core.Infra.IoC
 
                     IConfigurationRoot configurationRoot = configuration.Build();
                     mockWebNavigator = configurationRoot.GetValue<bool>("MockWebNavigator");
+                    totalThreads = configurationRoot.GetValue<int>("TotalThreads");
+
                 })
                 .ConfigureServices((_, services) =>
                 {
-                    var serviceCollection = services.AddTransient<IPageRepository, PageRepository>()
-                    .AddTransient<DbContext>(provider => new CrawlerDbContext(@"Server=(localdb)\mssqllocaldb;Database=WebCrawler"))
+                    var serviceCollection =
+
+                    services
+                    .AddDbContext<CrawlerDbContext>(provider =>
+                        {
+                            provider.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=WebCrawler");
+                        }, ServiceLifetime.Transient)
+                    
+                    .AddTransient<IPageRepository, PageRepository>()
                     .AddTransient<IWebCrawlerFolhaAppService, WebCrawlerFolhaAppService>()
+                    .AddTransient<IWebCrawlerFolhaAppAsyncService>((serviceProvider) =>
+                    {
+                        return new WebCrawlerFolhaAppAsyncService(serviceProvider, totalThreads);
+                    })
                     .AddTransient<IFolhaWebCrawlerService, FolhaWebCrawlerService>()
-                    .AddTransient((provider) => new HtmlWeb())
+                    .AddTransient<HtmlWeb>()
                     .AddTransient<IUnitOfWork, UnitOfWork>()
-                    .AddSingleton<IEventManager>(provider => {
-                        var eventManager = new EventManager();
-                        return eventManager;
-                    });
+                    .AddTransient<IEventManager, EventManager>();
 
                     if(mockWebNavigator)
                     {
@@ -62,15 +76,18 @@ namespace Core.Infra.IoC
 
                     }
                 })
-            
+            .ConfigureLogging((context, logging) => {
+                var env = context.HostingEnvironment;
+                var config = context.Configuration.GetSection("Logging");
+                logging.SetMinimumLevel(LogLevel.None);
+                logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.None);
+            })
             .Build();
+            host.RunAsync();
 
             _services = host.Services;
+            _provider = _services.CreateScope().ServiceProvider;
 
-            IServiceScope serviceScope = _services.CreateScope();
-            _provider = serviceScope.ServiceProvider;
-
-            host.RunAsync();
         }
 
         public T? Get<T>()

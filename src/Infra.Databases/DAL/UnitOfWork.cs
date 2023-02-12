@@ -2,6 +2,8 @@
 using Crawlers.Domains.Interfaces.DAL;
 using Crawlers.Domains.Interfaces.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Crawlers.Domains.Entities.ObjectValues.Pages;
+using Crawlers.Infra.Databases.Context;
 
 namespace Crawlers.Infra.Databases.DAL
 {
@@ -33,28 +35,45 @@ namespace Crawlers.Infra.Databases.DAL
             }
         }
 
-        public DbContext DbContext { get; }
+        public CrawlerDbContext DbContext { get; }
 
-        public UnitOfWork(DbContext dbContext)
+        public UnitOfWork(CrawlerDbContext dbContext)
         {
             DbContext = dbContext;
         }
 
         public void Save()
         {
-            DbContext.SaveChanges();
+            try
+            {
+                
+                DbContext.SaveChanges();
+
+
+            } catch(DbUpdateConcurrencyException e)
+            {
+                foreach (var entry in e.Entries)
+                {
+                    if (entry.Entity is Page)
+                    {
+                        var databaseValues = entry.GetDatabaseValues();
+
+                        entry.CurrentValues.SetValues(databaseValues);
+                    }
+                }
+            }
         }
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!this.disposed)
+            if (!disposed)
             {
                 if (disposing)
                 {
                     DbContext.Dispose();
                 }
             }
-            this.disposed = true;
+            disposed = true;
         }
 
         public void Dispose()

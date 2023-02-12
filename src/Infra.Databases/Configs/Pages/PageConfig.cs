@@ -18,6 +18,11 @@ namespace Crawlers.Infra.Databases.Configs.Pages
                 domain.OwnsOne(d => d.Country);
             });
 
+            builder.Property(page => page.ConcurrencyToken)
+                .IsConcurrencyToken()
+                .ValueGeneratedOnAddOrUpdate()
+                .HasColumnType("rowversion");
+
             builder.Ignore(d => d.Url);
             builder.HasMany(d => d.PagesCollections);
         }

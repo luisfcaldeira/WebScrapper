@@ -20,13 +20,15 @@ namespace Crawlers.Infra.WebScrapperServices.Services
 
         private IWebNavigator _webNavigator { get; }
 
-        public IList<Page> GetReferredPages(Page url)
+        public virtual IList<Page> GetReferredPages(Page page)
         {
-            HtmlDocument doc = GetDocument(url);
-            var anchors = doc.DocumentNode.SelectNodes("//a");
+            HtmlDocument doc = GetDocument(page);
+            var anchors = doc.DocumentNode.SelectNodes($"//a");
             var result = new List<Page>();
+
             if(anchors == null)
                 return result;
+
             foreach (var anchor in anchors)
             {
                 try
@@ -43,9 +45,9 @@ namespace Crawlers.Infra.WebScrapperServices.Services
             return result;
         }
 
-        public string? GetTitle(Page url)
+        public string? GetTitle(Page page)
         {
-            var doc = GetDocument(url);
+            var doc = GetDocument(page);
             var title = doc.DocumentNode.SelectNodes("//head/title").First();
             if(title == null)
                 return null;
@@ -61,9 +63,9 @@ namespace Crawlers.Infra.WebScrapperServices.Services
             return Encoding.UTF8.GetString(bytes);
         }
 
-        public string? GetMeta(Page url, string metaName)
+        public string? GetMeta(Page page, string metaName)
         {
-            var doc = GetDocument(url);
+            var doc = GetDocument(page);
             var metasNodes = doc.DocumentNode.SelectNodes("//head/meta");
             if (metasNodes == null)
                 return null;
@@ -93,8 +95,14 @@ namespace Crawlers.Infra.WebScrapperServices.Services
             return _webNavigator.GetDocument(page);
         }
 
-        public abstract string? GetContent(Page url);
+        public void Dispose()
+        {
+            _webNavigator.Dispose();
+            EventManager.Dispose();
+        }
 
-        public abstract T? GetEntity(Page url);
+        public abstract string? GetContent(Page page);
+
+        public abstract T? GetEntity(Page page);
     }
 }

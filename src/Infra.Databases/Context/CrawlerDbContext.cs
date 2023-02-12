@@ -6,19 +6,15 @@ namespace Crawlers.Infra.Databases.Context
 {
     public class CrawlerDbContext : DbContext
     {
-        private readonly string connectionString;
 
-        public CrawlerDbContext(string connectionString) : base()
+        public CrawlerDbContext(DbContextOptions<CrawlerDbContext> options) : base(options)
         {
-            this.connectionString = connectionString;
             Database.EnsureCreated();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer(connectionString);
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
