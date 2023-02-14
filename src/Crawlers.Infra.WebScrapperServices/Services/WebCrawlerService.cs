@@ -1,4 +1,5 @@
-﻿using Core.Infra.Services.Observers.Entities.Messages;
+﻿using Core.Infra.CrossCutting.Interfaces.Services.Configs.Managers;
+using Core.Infra.Services.Observers.Entities.Messages;
 using Core.Infra.Services.Observers.Interfaces;
 using Crawlers.Domains.Entities.ObjectValues.Pages;
 using Crawlers.Domains.Interfaces.Services.WebCrawlerServices;
@@ -10,12 +11,15 @@ namespace Crawlers.Infra.WebScrapperServices.Services
 {
     public abstract class WebCrawlerService<T> : IWebCrawlerService<T> where T : class
     {
+        protected IConfigsManager ConfigsManager { get; }
+
         protected IEventManager EventManager { get; }
 
-        public WebCrawlerService(IWebNavigator webNavigator, IEventManager eventManager)
+        public WebCrawlerService(IWebNavigator webNavigator, IEventManager eventManager, IConfigsManager configsManager)
         {
             _webNavigator = webNavigator;
             EventManager = eventManager;
+            ConfigsManager = configsManager;
         }
 
         private IWebNavigator _webNavigator { get; }
@@ -27,7 +31,7 @@ namespace Crawlers.Infra.WebScrapperServices.Services
             return ConvertAnchorsIntoPages(anchors);
         }
 
-        protected IList<Page> ConvertAnchorsIntoPages(HtmlNodeCollection anchors)
+        protected IList<Page> ConvertAnchorsIntoPages(IList<HtmlNode> anchors)
         {
             var result = new List<Page>();
 
@@ -38,7 +42,7 @@ namespace Crawlers.Infra.WebScrapperServices.Services
             {
                 try
                 {
-                    result.Add(PageCreator.Create(anchor.GetAttributeValue("href", "")));
+                    result.Add(PageCreator.Create(GetAnchorHref(anchor)));
                 }
                 catch (Exception ex)
                 {
@@ -48,6 +52,11 @@ namespace Crawlers.Infra.WebScrapperServices.Services
             }
 
             return result;
+        }
+
+        protected string GetAnchorHref(HtmlNode anchor)
+        {
+            return anchor.GetAttributeValue("href", "");
         }
 
         public string? GetTitle(Page page)

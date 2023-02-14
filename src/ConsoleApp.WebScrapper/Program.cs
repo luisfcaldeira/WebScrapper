@@ -1,24 +1,13 @@
-﻿using Core.Infra.IoC;
-using Crawlers.Infra.Databases.Context;
-using Crawlers.Infra.Databases.DAL;
-using Crawlers.Infra.Databases.DAL.Repositories;
-using Crawlers.Application.Interfaces.Services;
-using Crawlers.Application.Services;
+﻿using ConsoleApp.WebScrapper.InnerServices.Listeners;
+using Core.Infra.CrossCutting.Interfaces.Services.Configs.Managers;
+using Core.Infra.CrossCutting.Services.Configs;
+using Core.Infra.IoC;
+using Core.Infra.Services.Observers.Interfaces;
+using Crawlers.Application.Interfaces.Services.Async;
 using Crawlers.Domains.Entities.ObjectValues.Pages;
 using Crawlers.Domains.Interfaces.DAL;
-using Crawlers.Domains.Interfaces.DAL.Repositories;
-using Crawlers.Domains.Interfaces.Services.WebCrawlerServices;
-using Crawlers.Infra.WebScrapperServices.Services;
-using HtmlAgilityPack;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using System;
 using System.Threading;
-using System.Threading.Tasks;
-using Core.Infra.Services.Observers.Interfaces;
-using ConsoleApp.WebScrapper.InnerServices.Listeners;
-using Crawlers.Application.Interfaces.Services.Async;
 
 namespace ConsoleApp.WebScrapper
 {
@@ -42,9 +31,14 @@ namespace ConsoleApp.WebScrapper
             }
 
             var crawler = iocMapper.Get<IWebCrawlerFolhaAppAsyncService>();
+            var configsManager = iocMapper.Get<IConfigsManager>();
+
+            configsManager.Add(new FormatUrlConfiguration(@"^[htps]{4,5}.+\/20[1-2][0-9]\/\d{2}[\/0-9\-a-z]+\.shtml$"));
+
             var cancellation = new CancellationTokenSource();
+
             AddListenerToCancel(cancellation);
-            // TODO fazer override do método GetReferredPages em FolhaWebCrawlerService para capturar somente as urls dentro do corpo do texto.
+
             crawler.Scrap(cancellation.Token);
 
             Console.WriteLine("Finished. Press any key to quit");

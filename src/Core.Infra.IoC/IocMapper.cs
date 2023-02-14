@@ -19,6 +19,8 @@ using Core.Infra.Services.Observers;
 using Crawlers.Application.Services.Async;
 using Crawlers.Application.Interfaces.Services.Async;
 using Microsoft.Extensions.Logging;
+using Core.Infra.CrossCutting.Interfaces.Services.Configs.Managers;
+using Core.Infra.CrossCutting.Services.Configs.Managers;
 
 namespace Core.Infra.IoC
 {
@@ -65,7 +67,8 @@ namespace Core.Infra.IoC
                     .AddTransient<IFolhaWebCrawlerService, FolhaWebCrawlerService>()
                     .AddTransient<HtmlWeb>()
                     .AddTransient<IUnitOfWork, UnitOfWork>()
-                    .AddTransient<IEventManager, EventManager>();
+                    .AddTransient<IEventManager, EventManager>()
+                    .AddSingleton<IConfigsManager, ConfigsManager>();
 
                     if(mockWebNavigator)
                     {

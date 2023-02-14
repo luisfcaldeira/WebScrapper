@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.33214.272
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Consoles", "Consoles", "{14009178-075D-478A-AC48-D55FAB51F0E5}"
 EndProject
@@ -77,11 +77,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp.DocsExcamples.Mu
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Multithreads", "Multithreads", "{D516CAE2-5F5F-41DB-90B6-C9BF8FC1F963}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp.Multithread.DbInteractions", "src\ConsoleApp.Multithread.DbInteractions\ConsoleApp.Multithread.DbInteractions.csproj", "{7550D39A-0886-4EBF-B563-E4A928D2878B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp.Multithread.DbInteractions", "src\ConsoleApp.Multithread.DbInteractions\ConsoleApp.Multithread.DbInteractions.csproj", "{7550D39A-0886-4EBF-B563-E4A928D2878B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DB", "DB", "{D8E73319-6E0E-48CE-9BC3-4AE24C7E5309}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infra", "Infra", "{DF14DC06-4FE6-45BA-AFBF-B6B108AD825C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CrossCutting", "CrossCutting", "{22C0D959-EB3F-493E-BDAA-9790580C86A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Infra.CrossCutting", "src\Core.Infra.CrossCutting\Core.Infra.CrossCutting.csproj", "{814C6F3E-FC7C-4BA9-8FB0-049F051E8AE8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -141,6 +145,10 @@ Global
 		{7550D39A-0886-4EBF-B563-E4A928D2878B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7550D39A-0886-4EBF-B563-E4A928D2878B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7550D39A-0886-4EBF-B563-E4A928D2878B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{814C6F3E-FC7C-4BA9-8FB0-049F051E8AE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{814C6F3E-FC7C-4BA9-8FB0-049F051E8AE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{814C6F3E-FC7C-4BA9-8FB0-049F051E8AE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{814C6F3E-FC7C-4BA9-8FB0-049F051E8AE8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -182,6 +190,8 @@ Global
 		{7550D39A-0886-4EBF-B563-E4A928D2878B} = {D8E73319-6E0E-48CE-9BC3-4AE24C7E5309}
 		{D8E73319-6E0E-48CE-9BC3-4AE24C7E5309} = {DF14DC06-4FE6-45BA-AFBF-B6B108AD825C}
 		{DF14DC06-4FE6-45BA-AFBF-B6B108AD825C} = {D516CAE2-5F5F-41DB-90B6-C9BF8FC1F963}
+		{22C0D959-EB3F-493E-BDAA-9790580C86A6} = {8EFEB6C9-2B88-4514-A404-8A8AFC103697}
+		{814C6F3E-FC7C-4BA9-8FB0-049F051E8AE8} = {22C0D959-EB3F-493E-BDAA-9790580C86A6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4B636D73-3C88-43D2-B80B-F570E9CB6E10}

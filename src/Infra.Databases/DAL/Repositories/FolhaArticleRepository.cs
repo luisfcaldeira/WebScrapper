@@ -21,7 +21,7 @@ namespace Crawlers.Infra.Databases.DAL.Repositories
         public FolhaArticle? GetArticle(Page page)
         {
             return GetAll()
-                .Where(f => f.Page.Equals(page))
+                .Where(f => f.Page != null && f.Page.Equals(page))
                 .FirstOrDefault();
         }
     }
