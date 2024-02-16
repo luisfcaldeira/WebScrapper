@@ -22,13 +22,17 @@ namespace Crawlers.Infra.Databases.DAL.Repositories
 
         public Page? GetOneNotVisited()
         {
-            var all = GetAll();
-            return all.Where(u => !u.IsVisited && u.TaskCode == -1).OrderBy(r => Guid.NewGuid()).ToList().FirstOrDefault();
+            return GetNonVisited(1).FirstOrDefault();
         }
 
         public bool Exists(Page page)
         {
             return GetPage(page.Url) != null;
+        }
+
+        public List<Page> GetNonVisited(int quantity)
+        {
+            return GetAll().Where(u => !u.IsVisited && u.TaskCode == -1).OrderBy(r => Guid.NewGuid()).Take(quantity).ToList();
         }
     }
 }

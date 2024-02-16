@@ -12,12 +12,12 @@ namespace ConsoleApp.WebScrapper.InnerServices.Listeners
 
         protected void Write(IMessage message)
         {
-            Console.WriteLine($"[{message.Tag}] '{message.Description}'");
+            Console.WriteLine($"[{message.Tag}] - {DateTime.Now.ToString("HH:mm:ss")}: '{message.Description}'");
         }
 
         protected void Log(IMessage message)
         {
-            Debug.WriteLine($"[{message.Tag}] '{message.Description}'");
+            Debug.WriteLine($"[{message.Tag}] - {DateTime.Now.ToString("HH:mm:ss")}: '{message.Description}'");
         }
 
         public virtual void Update(IMessage message)

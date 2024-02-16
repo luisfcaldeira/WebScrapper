@@ -7,6 +7,7 @@ namespace Crawlers.Domains.Interfaces.DAL.Repositories
         Page? GetPage(string url);
         IEnumerable<Page> GetAllNotVisited();
         Page? GetOneNotVisited();
+        List<Page> GetNonVisited(int quantity);
         bool Exists(Page page);
     }
 }

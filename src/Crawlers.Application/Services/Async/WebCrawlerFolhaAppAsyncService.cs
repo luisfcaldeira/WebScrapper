@@ -36,6 +36,7 @@ namespace Crawlers.Application.Services.Async
                     {
                         service.Scrap(counter.Counter);
                         cancellationToken.ThrowIfCancellationRequested();
+                        
                     }
                 });
                 Thread.Sleep(300);

@@ -18,6 +18,9 @@ namespace Crawlers.Infra.Databases.Configs.Pages
                 domain.OwnsOne(d => d.Country);
             });
 
+            builder.HasIndex(page => page.RawUrl)
+                .IsClustered(false);
+
             builder.Property(page => page.ConcurrencyToken)
                 .IsConcurrencyToken()
                 .ValueGeneratedOnAddOrUpdate()

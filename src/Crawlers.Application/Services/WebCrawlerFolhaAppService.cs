@@ -30,25 +30,31 @@ namespace Crawlers.Application.Services
 
         private void ScrapOneIfExists(int taskCode)
         {
-            var page = UnitOfWork.PageRepository.GetOneNotVisited();
-            if (page != null)
+            var pages = UnitOfWork.PageRepository.GetNonVisited(10);
+            TakeThem(pages, taskCode);
+
+            pages.ForEach(page =>
             {
-                page.TaskCode = taskCode;
-                UnitOfWork.Save();
+                _eventManager.Notify(new Message(Tag.Evolution, $"Working on the page: '{page}'..."));
 
-                _eventManager.Notify(new Message(Tag.Evolution, "Página encontrada... "));
-                TakeItToMe(page, taskCode);
-
-                if(page.TaskCode == taskCode)
+                if (page.TaskCode == taskCode)
                 {
                     CreateAndSaveArticle(page, taskCode);
                 }
-            }
+            });
+
+            _eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - Saving in db..."));
+            UnitOfWork.Save();
         }
 
-        private void TakeItToMe(Page page, int taskCode)
+        private void TakeThem(List<Page> pages, int taskCode)
         {
-            page.TaskCode = taskCode;
+            foreach (var page in pages)
+            {
+                page.TaskCode = taskCode;
+            }
+
+            _eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - Taking {pages.Count} record(s)."));
             UnitOfWork.Save();
         }
 
@@ -59,12 +65,17 @@ namespace Crawlers.Application.Services
                 _eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - Accessing #{page.Id} url: '{page.RawUrl}' "));
 
                 var newPages = FolhaWebCrawlerService.GetReferredPages(page);
+                _eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - Saving {newPages.Count} new pages "));
                 SaveNewPages(newPages);
                 
+                _eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - Trying to convert into a article document "));
                 var folha = FolhaWebCrawlerService.GetEntity(page);
 
-                if(folha.IsValid)
+                if (folha.IsValid)
+                {
+                    _eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - Document is valid, converting... "));
                     SaveArticle(folha);
+                }
 
             } catch(Exception ex)
             {
@@ -74,18 +85,14 @@ namespace Crawlers.Application.Services
 
             page.Visit();
 
-            _eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - Saving in db..."));
-            UnitOfWork.Save();
+            
         }
 
         private void SaveNewPages(IEnumerable<Page> pages)
         {
             foreach (var page in pages)
             {
-                if (!UnitOfWork.PageRepository.Exists(page))
-                {
-                    UnitOfWork.PageRepository.Add(page);
-                }
+                UnitOfWork.PageRepository.Add(page);
             }
         }
 
