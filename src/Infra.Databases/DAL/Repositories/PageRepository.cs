@@ -23,7 +23,7 @@ namespace Crawlers.Infra.Databases.DAL.Repositories
         public Page? GetOneNotVisited()
         {
             var all = GetAll();
-            return all.Where(u => !u.IsVisited).OrderBy(r => Guid.NewGuid()).FirstOrDefault();
+            return all.Where(u => !u.IsVisited && u.TaskCode == -1).OrderBy(r => Guid.NewGuid()).ToList().FirstOrDefault();
         }
 
         public bool Exists(Page page)

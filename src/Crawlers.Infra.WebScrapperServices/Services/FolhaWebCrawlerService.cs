@@ -62,10 +62,17 @@ namespace Crawlers.Infra.WebScrapperServices.Services
             HtmlDocument doc = GetDocument(page);
             
             var anchors = doc.DocumentNode.SelectNodes($"//div[contains(@class, 'c-news__content')]//a");
+
+            if (anchors == null || anchors.Count == 0 )
+            {
+                anchors = doc.DocumentNode.SelectNodes($"//main//a");
+            }
+
             if(anchors != null && anchors.Count > 0)
             {
                 return ApplyRule(anchors);
-            }
+            } 
+
 
             return new List<Page>();
         }

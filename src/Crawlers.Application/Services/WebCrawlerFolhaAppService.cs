@@ -33,6 +33,9 @@ namespace Crawlers.Application.Services
             var page = UnitOfWork.PageRepository.GetOneNotVisited();
             if (page != null)
             {
+                page.TaskCode = taskCode;
+                UnitOfWork.Save();
+
                 _eventManager.Notify(new Message(Tag.Evolution, "Página encontrada... "));
                 TakeItToMe(page, taskCode);
 

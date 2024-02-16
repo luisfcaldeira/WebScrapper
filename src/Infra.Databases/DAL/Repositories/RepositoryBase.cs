@@ -12,6 +12,7 @@ namespace Crawlers.Infra.Databases.DAL.Repositories
         public RepositoryBase(DbContext dbContext)
         {
             DbContext = dbContext;
+            
             DbSet = dbContext.Set<T>();
         }
 

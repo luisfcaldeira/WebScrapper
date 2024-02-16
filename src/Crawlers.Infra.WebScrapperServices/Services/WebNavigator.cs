@@ -1,6 +1,7 @@
 ﻿using Crawlers.Domains.Entities.ObjectValues.Pages;
 using Crawlers.Infra.WebScrapperServices.Interfaces.InnerServices;
 using HtmlAgilityPack;
+using System.Diagnostics;
 
 namespace Crawlers.Infra.WebScrapperServices.Services
 {

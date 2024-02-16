@@ -38,6 +38,7 @@ namespace Crawlers.Application.Services.Async
                         cancellationToken.ThrowIfCancellationRequested();
                     }
                 });
+                Thread.Sleep(300);
             }
 
             Task.WaitAll(tasks);

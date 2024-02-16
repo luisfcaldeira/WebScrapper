@@ -22,7 +22,7 @@ namespace ConsoleApp.WebScrapper
             eventManager.Attach(new LogMessageEventListener());
             eventManager.Attach(new LogErrorEventListener());
 
-            var strUrl = "https://www1.folha.uol.com.br/poder/2022/08/lula-informa-ao-tse-ter-criado-redes-sociais-direcionadas-a-evangelicos.shtml";
+            var strUrl = "https://folha.uol.com.br";
 
             if (unitOfWork.PageRepository.GetPage(strUrl) == null)
             {

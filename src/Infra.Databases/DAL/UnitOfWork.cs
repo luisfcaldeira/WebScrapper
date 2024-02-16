@@ -4,6 +4,7 @@ using Crawlers.Domains.Interfaces.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Crawlers.Domains.Entities.ObjectValues.Pages;
 using Crawlers.Infra.Databases.Context;
+using System.Data;
 
 namespace Crawlers.Infra.Databases.DAL
 {
@@ -46,11 +47,13 @@ namespace Crawlers.Infra.Databases.DAL
         {
             try
             {
-                
-                DbContext.SaveChanges();
-
-
-            } catch(DbUpdateConcurrencyException e)
+                using (var trans = DbContext.Database.BeginTransaction())
+                {
+                    DbContext.SaveChanges();
+                    trans.Commit();
+                }
+            } 
+            catch(DbUpdateConcurrencyException e)
             {
                 foreach (var entry in e.Entries)
                 {
