@@ -35,9 +35,6 @@ namespace Crawlers.Application.Services
         {
             _semaphore = true;
             var pages = UnitOfWork.PageRepository.GetNonVisited(10).ToList();
-            if (!pages.Any())
-                return;
-
             TakeThem(pages, taskCode);
             _semaphore = false;
 
