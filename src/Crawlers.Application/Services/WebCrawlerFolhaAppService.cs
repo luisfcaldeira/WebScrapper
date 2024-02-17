@@ -7,6 +7,7 @@ using Crawlers.Domains.Interfaces.DAL;
 using Crawlers.Domains.Interfaces.Services.WebCrawlerServices;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Crawlers.Application.Services
 {
@@ -23,6 +24,7 @@ namespace Crawlers.Application.Services
         private IFolhaWebCrawlerService FolhaWebCrawlerService;
         private readonly IEventManager _eventManager;
 
+
         public void Scrap(int taskCode)
         {
             ScrapOneIfExists(taskCode);
@@ -30,7 +32,10 @@ namespace Crawlers.Application.Services
 
         private void ScrapOneIfExists(int taskCode)
         {
-            var pages = UnitOfWork.PageRepository.GetNonVisited(10);
+            var pages = UnitOfWork.PageRepository.GetNonVisited(10).ToList();
+            if (!pages.Any())
+                return;
+
             TakeThem(pages, taskCode);
 
             pages.ForEach(page =>
@@ -54,7 +59,7 @@ namespace Crawlers.Application.Services
                 page.TaskCode = taskCode;
             }
 
-            _eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - Taking {pages.Count} record(s)."));
+            _eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - Taking {pages.Count} record(s) from DB."));
             UnitOfWork.Save();
         }
 

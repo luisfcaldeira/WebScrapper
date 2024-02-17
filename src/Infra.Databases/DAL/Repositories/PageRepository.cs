@@ -6,6 +6,7 @@ namespace Crawlers.Infra.Databases.DAL.Repositories
 {
     public class PageRepository : RepositoryBase<Page>, IPageRepository
     {
+        private static bool _semaphore = false;
         public PageRepository(CrawlerDbContext dbContext) : base(dbContext)
         {
         }
@@ -30,9 +31,17 @@ namespace Crawlers.Infra.Databases.DAL.Repositories
             return GetPage(page.Url) != null;
         }
 
-        public List<Page> GetNonVisited(int quantity)
+        public IEnumerable<Page> GetNonVisited(int quantity)
         {
-            return GetAll().Where(u => !u.IsVisited && u.TaskCode == -1).OrderBy(r => Guid.NewGuid()).Take(quantity).ToList();
+            if(_semaphore) 
+                return new List<Page>();
+
+            _semaphore = true;
+            var result =  GetAll().Where(u => !u.IsVisited && u.TaskCode == -1)
+                .OrderBy(r => Guid.NewGuid())
+                .Take(quantity);
+            _semaphore = false;
+            return result;
         }
     }
 }

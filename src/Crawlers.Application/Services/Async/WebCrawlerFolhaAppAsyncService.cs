@@ -1,8 +1,13 @@
-﻿using Crawlers.Application.Interfaces.Services;
+﻿using Core.Infra.Services.Observers;
+using Core.Infra.Services.Observers.Entities.Messages;
+using Core.Infra.Services.Observers.Interfaces;
+using Crawlers.Application.Interfaces.Services;
 using Crawlers.Application.Interfaces.Services.Async;
 using Crawlers.Application.Services.Async.Supporters;
+using Crawlers.Domains.Entities.ObjectValues.Pages;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,12 +28,14 @@ namespace Crawlers.Application.Services.Async
         public void Scrap(CancellationToken cancellationToken)
         {
 
+            Console.WriteLine($"App started");
             TaskFactory taskFactory = new TaskFactory();
-
             Task[] tasks = new Task[_threadCount];
 
             for(int i = 0; i < _threadCount; i++)
             {
+                Console.WriteLine($"Starting task [{i}]");
+
                 tasks[i] = taskFactory.StartNew(() => {
                     var counter = new ThreadCounter();
                     var service = _provider.GetService<IWebCrawlerFolhaAppService>();
@@ -39,7 +46,7 @@ namespace Crawlers.Application.Services.Async
                         
                     }
                 });
-                Thread.Sleep(300);
+                //Thread.Sleep(60000);
             }
 
             Task.WaitAll(tasks);

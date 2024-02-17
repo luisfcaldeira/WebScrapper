@@ -15,6 +15,10 @@ namespace ConsoleApp.WebScrapper
     {
         public static void Main()
         {
+
+            Console.WriteLine("Hello");
+            Console.WriteLine("Collecting dependences");
+
             var iocMapper = new IocMapper();
 
             var unitOfWork = iocMapper.Get<IUnitOfWork>();
@@ -39,6 +43,8 @@ namespace ConsoleApp.WebScrapper
 
             AddListenerToCancel(cancellation);
 
+
+            Console.WriteLine("Starting app");
             crawler.Scrap(cancellation.Token);
 
             Console.WriteLine("Finished. Press any key to quit");
