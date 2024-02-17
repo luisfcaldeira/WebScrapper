@@ -23,20 +23,23 @@ namespace Crawlers.Application.Services
         private IUnitOfWork UnitOfWork;
         private IFolhaWebCrawlerService FolhaWebCrawlerService;
         private readonly IEventManager _eventManager;
-
+        private static bool _semaphore = false;
 
         public void Scrap(int taskCode)
         {
-            ScrapOneIfExists(taskCode);
+            if(!_semaphore)
+                ScrapOneIfExists(taskCode);
         }
 
         private void ScrapOneIfExists(int taskCode)
         {
+            _semaphore = true;
             var pages = UnitOfWork.PageRepository.GetNonVisited(10).ToList();
             if (!pages.Any())
                 return;
 
             TakeThem(pages, taskCode);
+            _semaphore = false;
 
             pages.ForEach(page =>
             {
