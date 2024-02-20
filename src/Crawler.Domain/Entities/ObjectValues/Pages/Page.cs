@@ -63,7 +63,7 @@ namespace Crawlers.Domains.Entities.ObjectValues.Pages
 
         public void InformError(Exception ex)
         {
-            MessageErro                                                                                                                             = ex.Message;
+            MessageErro = ex.Message;
         }
 
         public bool HasErro()
