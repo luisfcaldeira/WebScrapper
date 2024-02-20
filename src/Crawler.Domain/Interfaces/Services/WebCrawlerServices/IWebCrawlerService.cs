@@ -4,7 +4,7 @@ namespace Crawlers.Domains.Interfaces.Services.WebCrawlerServices
 {
     public interface IWebCrawlerService<T> : IDisposable where T : class 
     {
-        IList<Page> GetReferredPages(Page url);
+        IList<Page> GetReferralsPages(Page url);
         string? GetTitle(Page url);
         string? GetContent(Page url);
         T? GetEntity(Page url);

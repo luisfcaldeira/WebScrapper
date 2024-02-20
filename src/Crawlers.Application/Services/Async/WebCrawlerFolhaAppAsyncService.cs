@@ -1,13 +1,8 @@
-﻿using Core.Infra.Services.Observers;
-using Core.Infra.Services.Observers.Entities.Messages;
-using Core.Infra.Services.Observers.Interfaces;
-using Crawlers.Application.Interfaces.Services;
+﻿using Crawlers.Application.Interfaces.Services;
 using Crawlers.Application.Interfaces.Services.Async;
 using Crawlers.Application.Services.Async.Supporters;
-using Crawlers.Domains.Entities.ObjectValues.Pages;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -43,10 +38,8 @@ namespace Crawlers.Application.Services.Async
                     {
                         service.Scrap(counter.Counter);
                         cancellationToken.ThrowIfCancellationRequested();
-                        
                     }
                 });
-                //Thread.Sleep(60000);
             }
 
             Task.WaitAll(tasks);

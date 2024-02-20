@@ -15,7 +15,6 @@ namespace Crawlers.Domains.Entities.Articles
             Title = folha.Title;
             Content = folha.Content;
             Published = folha.Published;
-            ReferredPages = folha.ReferredPages;
         }
     }
 }

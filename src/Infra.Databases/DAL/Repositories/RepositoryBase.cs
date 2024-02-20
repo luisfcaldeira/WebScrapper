@@ -16,14 +16,14 @@ namespace Crawlers.Infra.Databases.DAL.Repositories
             DbSet = dbContext.Set<T>();
         }
 
-        public async void Add(T entity)
+        public void Add(T entity)
         {
-            await DbContext.AddAsync(entity);
+            DbContext.Add(entity);
         }
 
-        public async void AddRange(IEnumerable<T> entities)
+        public void AddRange(IEnumerable<T> entities)
         {
-            await Task.Run(() =>
+            Task.Run(() =>
             {
                 foreach (T entity in entities)
                 {
@@ -56,7 +56,16 @@ namespace Crawlers.Infra.Databases.DAL.Repositories
 
         public void Update(T entity)
         {
-            DbSet.Attach(entity);
+            try
+            {
+
+                DbSet.Attach(entity);
+            } catch(InvalidOperationException ex)
+            {
+                if (!ex.Message.Contains("is already being tracked"))
+                    throw;
+            }
+
             DbContext.Entry(entity).State = EntityState.Modified;
         }
 

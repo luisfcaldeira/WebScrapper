@@ -10,6 +10,7 @@ namespace Crawlers.Infra.Databases.Context
         public CrawlerDbContext(DbContextOptions<CrawlerDbContext> options) : base(options)
         {
             Database.EnsureCreated();
+            ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

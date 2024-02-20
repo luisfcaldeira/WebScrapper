@@ -8,7 +8,7 @@ namespace Crawlers.Infra.Databases.Configs.Pages
     {
         public void Configure(EntityTypeBuilder<BaseArticle> builder)
         {
-            builder.HasOne(a => a.ReferredPages);
+
         }
     }
 }

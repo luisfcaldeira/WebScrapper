@@ -8,7 +8,7 @@ namespace Crawlers.Domains.Entities.ObjectValues.Pages
         public int Id { get; set; }
         public Domain Domain { get; private set; } = new Domain();
         public DateTime Created { get; set; } = DateTime.Now;
-        public DateTime? Visited { get; private set; }
+        public DateTime? Visited { get; private set; } = null;
         public ICollection<BaseArticle> Articles{ get; set; }
         public string? MessageErro { get; private set; }
         public string? RawUrl { get; internal set; }
@@ -63,7 +63,7 @@ namespace Crawlers.Domains.Entities.ObjectValues.Pages
 
         public void InformError(Exception ex)
         {
-            MessageErro = ex.Message;
+            MessageErro                                                                                                                             = ex.Message;
         }
 
         public bool HasErro()
@@ -90,6 +90,5 @@ namespace Crawlers.Domains.Entities.ObjectValues.Pages
         {
             return HashCode.Combine(Id, Url);
         }
-
     }
 }

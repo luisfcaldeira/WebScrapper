@@ -7,5 +7,7 @@ namespace Crawlers.Domains.Interfaces.DAL
         IPageRepository PageRepository { get; }
         IFolhaArticleRepository FolhaArticleRepository { get; }
         void Save();
+        public void DisableTracking();
+        public void EnableTracking();
     }
 }

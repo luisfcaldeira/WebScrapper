@@ -1,6 +1,5 @@
 ﻿using Core.Infra.CrossCutting.Interfaces.Services.Configs.Managers;
 using Core.Infra.Services.Observers.Interfaces;
-using Crawlers.Domains.Collections.ObjectValues.Pages;
 using Crawlers.Domains.Entities.Articles;
 using Crawlers.Domains.Entities.ObjectValues.Pages;
 using Crawlers.Domains.Interfaces.Services.WebCrawlerServices;
@@ -45,19 +44,10 @@ namespace Crawlers.Infra.WebScrapperServices.Services
 
         public override FolhaArticle? GetEntity(Page url)
         {
-            var referred = GetReferredPages(url);
-
-            var folhaArticle = new FolhaArticle(GetTitle(url), GetContent(url), url, GetPublishDate(url));
-
-            if(referred.Count > 0)
-            {
-                folhaArticle.ReferredPages = new PageCollection(referred, url.Domain);
-            }
-
-            return folhaArticle;
+            return new FolhaArticle(GetTitle(url), GetContent(url), url, GetPublishDate(url));
         }
 
-        public override IList<Page> GetReferredPages(Page page)
+        public override IList<Page> GetReferralsPages(Page page)
         {
             HtmlDocument doc = GetDocument(page);
             

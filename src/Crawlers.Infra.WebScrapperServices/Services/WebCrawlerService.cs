@@ -24,7 +24,7 @@ namespace Crawlers.Infra.WebScrapperServices.Services
 
         private IWebNavigator _webNavigator { get; }
 
-        public virtual IList<Page> GetReferredPages(Page page)
+        public virtual IList<Page> GetReferralsPages(Page page)
         {
             HtmlDocument doc = GetDocument(page);
             var anchors = doc.DocumentNode.SelectNodes($"//a");
@@ -86,7 +86,7 @@ namespace Crawlers.Infra.WebScrapperServices.Services
 
             foreach(var node in metasNodes)
             {
-                if (GetAttributeValue(node, "name") == metaName)
+                if (GetAttributeValue(node, "property") == metaName)
                     return GetAttributeValue(node, "content");
             }
 

@@ -9,5 +9,7 @@ namespace Crawlers.Domains.Interfaces.DAL.Repositories
         Page? GetOneNotVisited();
         IEnumerable<Page> GetNonVisited(int quantity);
         bool Exists(Page page);
+        void RemoveDuplicity();
+        void Insert(Page page);
     }
 }

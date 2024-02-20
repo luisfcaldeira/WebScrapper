@@ -19,10 +19,10 @@ namespace Tests.Crawler.Services.WebCrawlers
         public void TestIfCatchAllReferredPages()
         {
 
-            var referredPages = Service.GetReferredPages(Page);
+            var referralPages = Service.GetReferralsPages(Page);
 
-            Assert.AreEqual(1, referredPages.Count);
-            var firstPage = referredPages.First();
+            Assert.AreEqual(1, referralPages.Count);
+            var firstPage = referralPages.First();
 
             Assert.AreEqual("domain", firstPage.Domain.Name);
         }

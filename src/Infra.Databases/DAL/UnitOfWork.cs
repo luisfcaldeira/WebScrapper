@@ -1,10 +1,10 @@
-﻿using Crawlers.Infra.Databases.DAL.Repositories;
+﻿using Crawlers.Domains.Entities.ObjectValues.Pages;
 using Crawlers.Domains.Interfaces.DAL;
 using Crawlers.Domains.Interfaces.DAL.Repositories;
-using Microsoft.EntityFrameworkCore;
-using Crawlers.Domains.Entities.ObjectValues.Pages;
 using Crawlers.Infra.Databases.Context;
-using System.Data;
+using Crawlers.Infra.Databases.DAL.Repositories;
+using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace Crawlers.Infra.Databases.DAL
 {
@@ -47,6 +47,8 @@ namespace Crawlers.Infra.Databases.DAL
         {
             try
             {
+                WaitTransaction();
+
                 using (var trans = DbContext.Database.BeginTransaction())
                 {
                     DbContext.SaveChanges();
@@ -65,6 +67,21 @@ namespace Crawlers.Infra.Databases.DAL
                     }
                 }
             }
+        }
+
+        private void WaitTransaction()
+        {
+            while (DbContext.Database.CurrentTransaction != null) ;
+        }
+
+        public void DisableTracking()
+        {
+            this.DbContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+        }
+
+        public void EnableTracking()
+        {
+            this.DbContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
         }
 
         protected virtual void Dispose(bool disposing)

@@ -20,25 +20,21 @@ namespace Crawlers.Application.Services
             _eventManager = eventManager;
         }
 
-        private IUnitOfWork UnitOfWork;
-        private IFolhaWebCrawlerService FolhaWebCrawlerService;
+        private readonly IUnitOfWork UnitOfWork;
+        private readonly IFolhaWebCrawlerService FolhaWebCrawlerService;
         private readonly IEventManager _eventManager;
-        private static bool _semaphore = false;
 
         public void Scrap(int taskCode)
         {
-            if(!_semaphore)
-                ScrapOneIfExists(taskCode);
+            scrap(taskCode);
         }
 
-        private void ScrapOneIfExists(int taskCode)
+        private void scrap(int taskCode)
         {
-            _semaphore = true;
-            var pages = UnitOfWork.PageRepository.GetNonVisited(10).ToList();
+            var pages = UnitOfWork.PageRepository.GetNonVisited(100).ToList();
             TakeThem(pages, taskCode);
-            _semaphore = false;
 
-            pages.ForEach(page =>
+            foreach(var page in pages.Where(p => p.TaskCode == taskCode))
             {
                 _eventManager.Notify(new Message(Tag.Evolution, $"Working on the page: '{page}'..."));
 
@@ -46,10 +42,13 @@ namespace Crawlers.Application.Services
                 {
                     CreateAndSaveArticle(page, taskCode);
                 }
-            });
+            }
 
-            _eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - Saving in db..."));
-            UnitOfWork.Save();
+            if(pages.Any())
+            {
+                _eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - Saving in db..."));
+                UnitOfWork.Save();
+            }
         }
 
         private void TakeThem(List<Page> pages, int taskCode)
@@ -57,61 +56,48 @@ namespace Crawlers.Application.Services
             foreach (var page in pages)
             {
                 page.TaskCode = taskCode;
+                UnitOfWork.PageRepository.Update(page); 
             }
-
-            _eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - Taking {pages.Count} record(s) from DB."));
-            UnitOfWork.Save();
+            if(pages.Any())
+            {
+                _eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - It was took {pages.Count} record(s) from DB."));
+                UnitOfWork.Save();
+            }
         }
 
         private void CreateAndSaveArticle(Page page, int taskCode)
         {
             try
             {
-                _eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - Accessing #{page.Id} url: '{page.RawUrl}' "));
+                _eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - Accessing #{page.Id} url: '{page.RawUrl}' and getting referrals"));
 
-                var newPages = FolhaWebCrawlerService.GetReferredPages(page);
-                _eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - Saving {newPages.Count} new pages "));
-                SaveNewPages(newPages);
-                
-                _eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - Trying to convert into a article document "));
+                var newPages = FolhaWebCrawlerService.GetReferralsPages(page);
+                InsertNewPages(taskCode, newPages);
+
+                _eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - Trying to convert into an article document "));
                 var folha = FolhaWebCrawlerService.GetEntity(page);
 
-                if (folha.IsValid)
-                {
-                    _eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - Document is valid, converting... "));
-                    SaveArticle(folha);
-                }
-
-            } catch(Exception ex)
+                UnitOfWork.FolhaArticleRepository.Add(folha);
+                
+            }
+            catch (Exception ex)
             {
                 page.InformError(ex);
                 _eventManager.Notify(new Message(Tag.Error, ex.Message));
             }
 
             page.Visit();
-
-            
+            UnitOfWork.PageRepository.Update(page);
+            UnitOfWork.Save();
         }
 
-        private void SaveNewPages(IEnumerable<Page> pages)
+        private void InsertNewPages(int taskCode, IList<Page> newPages)
         {
-            foreach (var page in pages)
-            {
-                UnitOfWork.PageRepository.Add(page);
-            }
-        }
+            _eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - Saving {newPages.Count} new pages "));
 
-        private void SaveArticle(FolhaArticle folha)
-        {
-            if (!UnitOfWork.FolhaArticleRepository.Exists(folha))
+            foreach (var p in newPages)
             {
-                UnitOfWork.FolhaArticleRepository.Add(folha);
-            }
-            else
-            {
-                FolhaArticle folhaDb = UnitOfWork.FolhaArticleRepository.GetArticle(folha.Page);
-                folhaDb.Update(folha);
-                UnitOfWork.FolhaArticleRepository.Update(folhaDb);
+                UnitOfWork.PageRepository.Insert(p);
             }
         }
 

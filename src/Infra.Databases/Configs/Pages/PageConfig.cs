@@ -8,6 +8,14 @@ namespace Crawlers.Infra.Databases.Configs.Pages
     {
         public void Configure(EntityTypeBuilder<Page> builder)
         {
+            builder.HasKey(page => new {
+                page.Id
+            });
+
+            builder.HasIndex(page =>
+                page.RawUrl
+            ).IsUnique();  
+
             builder.HasMany(page => page.Articles);
             builder.OwnsOne(page => page.Domain);
             builder.OwnsOne(page => page.Domain, domain =>
@@ -17,9 +25,6 @@ namespace Crawlers.Infra.Databases.Configs.Pages
                 domain.OwnsOne(d => d.Directory);
                 domain.OwnsOne(d => d.Country);
             });
-
-            builder.HasIndex(page => page.RawUrl)
-                .IsClustered(false);
 
             builder.Property(page => page.ConcurrencyToken)
                 .IsConcurrencyToken()
