@@ -34,10 +34,22 @@ namespace Crawlers.Infra.Databases.DAL.Repositories
 
         public IEnumerable<Page> GetNonVisited(int quantity)
         {
-            var result = GetAllNotVisited()
-                .OrderBy(r => Guid.NewGuid())
-                .Take(quantity);
-            return result;
+            return DbSet.FromSqlRaw(@$"SELECT TOP ({quantity}) [Id]
+                              ,[Domain_Protocol_Value]
+                              ,[Domain_Subdomain_Value]
+                              ,[Domain_Name]
+                              ,[Domain_TopLevel]
+                              ,[Domain_Country_Value]
+                              ,[Domain_Directory_Value]
+                              ,[Created]
+                              ,[Visited]
+                              ,[MessageErro]
+                              ,[RawUrl]
+                              ,[ConcurrencyToken]
+                              ,[TaskCode]
+                          FROM [Crawlers].[Page]
+                          ORDER BY NEWID()");
+
         }
 
         public void Insert(Page page)

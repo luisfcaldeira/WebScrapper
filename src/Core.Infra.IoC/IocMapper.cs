@@ -30,6 +30,7 @@ namespace Core.Infra.IoC
         private IServiceProvider _provider;
         private bool mockWebNavigator;
         private int totalThreads;
+        private int totalPackage;
 
         public IocMapper()
         {
@@ -46,6 +47,7 @@ namespace Core.Infra.IoC
                     IConfigurationRoot configurationRoot = configuration.Build();
                     mockWebNavigator = configurationRoot.GetValue<bool>("MockWebNavigator");
                     totalThreads = configurationRoot.GetValue<int>("TotalThreads");
+                    totalPackage = configurationRoot.GetValue<int>("TotalPackage");
 
                 })
                 .ConfigureServices((_, services) =>
@@ -58,9 +60,12 @@ namespace Core.Infra.IoC
                             //provider.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=WebCrawler");
                             provider.UseSqlServer(@"Server=DESKTOP-L0UN16O;Database=WebCrawler2;User Id=acatc2;Password=acatc2;");
                         }, ServiceLifetime.Transient)
-                    
+
                     .AddTransient<IPageRepository, PageRepository>()
-                    .AddTransient<IWebCrawlerFolhaAppService, WebCrawlerFolhaAppService>()
+                    .AddTransient<IWebCrawlerFolhaAppService, WebCrawlerFolhaAppService>((serviceProvider) =>
+                    {
+                        return new WebCrawlerFolhaAppService(serviceProvider.GetService<IUnitOfWork>(), serviceProvider.GetService<IFolhaWebCrawlerService>(), serviceProvider.GetService<IEventManager>(), totalPackage);
+                    })
                     .AddTransient<IWebCrawlerFolhaAppAsyncService>((serviceProvider) =>
                     {
                         return new WebCrawlerFolhaAppAsyncService(serviceProvider, totalThreads);

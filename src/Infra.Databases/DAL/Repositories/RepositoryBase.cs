@@ -1,5 +1,6 @@
 ﻿using Crawlers.Domains.Interfaces.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Crawlers.Infra.Databases.DAL.Repositories
 {
@@ -65,8 +66,12 @@ namespace Crawlers.Infra.Databases.DAL.Repositories
                 if (!ex.Message.Contains("is already being tracked"))
                     throw;
             }
-
             DbContext.Entry(entity).State = EntityState.Modified;
+        }
+
+        public void Detach(T entity)
+        {
+            DbContext.Entry(entity).State = EntityState.Detached;
         }
 
         protected virtual void Dispose(bool disposing)

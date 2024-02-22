@@ -7,5 +7,6 @@
         void Add(T entity);
         void AddRange(IEnumerable<T> entities);
         void Update(T entity);
+        void Detach(T entity);
     }
 }
