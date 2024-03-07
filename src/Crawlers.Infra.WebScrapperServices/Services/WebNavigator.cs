@@ -38,8 +38,9 @@ namespace Crawlers.Infra.WebScrapperServices.Services
                 return true;
 
             };
-            var document = htmlWeb.Load(page.Url, "POST");
-            
+            var document = htmlWeb.Load(page.Url);
+            document.OptionDefaultStreamEncoding = Encoding.Latin1;
+
             return document;
         }
     }

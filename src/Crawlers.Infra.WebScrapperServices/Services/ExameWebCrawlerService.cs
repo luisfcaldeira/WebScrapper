@@ -4,6 +4,7 @@ using Crawlers.Domains.Entities.Articles;
 using Crawlers.Domains.Entities.ObjectValues.Pages;
 using Crawlers.Domains.Interfaces.Services.WebCrawlerServices;
 using Crawlers.Infra.WebScrapperServices.Interfaces.InnerServices;
+using System.Reflection.Metadata;
 using System.Text;
 
 namespace Crawlers.Infra.WebScrapperServices.Services
@@ -26,7 +27,14 @@ namespace Crawlers.Infra.WebScrapperServices.Services
 
             foreach (var node in nodes)
             {
-                result.Append(node.InnerText);
+
+                Encoding iso = Encoding.GetEncoding("ISO-8859-1");
+                Encoding utf8 = Encoding.Latin1;
+                byte[] utfBytes = utf8.GetBytes(node.InnerText);
+                byte[] isoBytes = Encoding.Convert(utf8, iso, utfBytes);
+                string text = iso.GetString(isoBytes);
+
+                result.Append(text);
             }
 
             return Decode(result.ToString());

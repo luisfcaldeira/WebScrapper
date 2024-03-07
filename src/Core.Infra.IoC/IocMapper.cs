@@ -74,9 +74,9 @@ namespace Core.Infra.IoC
                     .AddTransient<IUnitOfWork, UnitOfWork>()
                     .AddTransient<IEventManager, EventManager>()
                     .AddSingleton<IConfigsManager, ConfigsManager>()
-                    .AddTransient<IWebCrawlerAppService, WebCrawlerFolhaAppService>((serviceProvider) =>
+                    .AddTransient<IWebCrawlerAppService, WebCrawlerAppService>((serviceProvider) =>
                     {
-                        return new WebCrawlerFolhaAppService(serviceProvider.GetService<IUnitOfWork>(), serviceProvider.GetService<IWebCrawlerService>(), serviceProvider.GetService<IEventManager>(), totalPackage);
+                        return new WebCrawlerAppService(serviceProvider.GetService<IUnitOfWork>(), serviceProvider.GetService<IWebCrawlerService>(), serviceProvider.GetService<IEventManager>(), totalPackage);
                     }); 
 
                     switch(site)

@@ -10,9 +10,9 @@ using System.Linq;
 
 namespace Crawlers.Application.Services
 {
-    public class WebCrawlerFolhaAppService : IWebCrawlerFolhaAppService
+    public class WebCrawlerAppService : IWebCrawlerAppService
     {
-        public WebCrawlerFolhaAppService(IUnitOfWork unitOfWork, IWebCrawlerService WebCrawlerService, IEventManager eventManager, int totalPackage)
+        public WebCrawlerAppService(IUnitOfWork unitOfWork, IWebCrawlerService WebCrawlerService, IEventManager eventManager, int totalPackage)
         {
             UnitOfWork = unitOfWork;
             this.WebCrawlerService = WebCrawlerService;
