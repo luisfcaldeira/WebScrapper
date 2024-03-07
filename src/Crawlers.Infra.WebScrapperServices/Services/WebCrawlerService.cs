@@ -1,15 +1,18 @@
 ﻿using Core.Infra.CrossCutting.Interfaces.Services.Configs.Managers;
 using Core.Infra.Services.Observers.Entities.Messages;
 using Core.Infra.Services.Observers.Interfaces;
+using Crawlers.Domains.Entities.Articles;
 using Crawlers.Domains.Entities.ObjectValues.Pages;
+using Crawlers.Domains.Entities.ObjectValues.Pages.Builders;
 using Crawlers.Domains.Interfaces.Services.WebCrawlerServices;
 using Crawlers.Infra.WebScrapperServices.Interfaces.InnerServices;
 using HtmlAgilityPack;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Crawlers.Infra.WebScrapperServices.Services
 {
-    public abstract class WebCrawlerService<T> : IWebCrawlerService<T> where T : class
+    public abstract class WebCrawlerService : IWebCrawlerService
     {
         protected IConfigsManager ConfigsManager { get; }
 
@@ -28,7 +31,46 @@ namespace Crawlers.Infra.WebScrapperServices.Services
         {
             HtmlDocument doc = GetDocument(page);
             var anchors = doc.DocumentNode.SelectNodes($"//a");
-            return ConvertAnchorsIntoPages(anchors);
+            var filteredAnchors = ApplyRule(anchors);
+
+            for(var i = 0; i < filteredAnchors.Count; i++)
+            {
+                var a = filteredAnchors[i];
+                if(!a.RawUrl.StartsWith("http"))
+                {
+                    filteredAnchors[i] = PageBuilder.With(page.Domain.Name, page.Domain.TopLevel)
+                        .WithUrl(page.Url + "/" + a.RawUrl)
+                        .WithProtocol(page.Domain.Protocol.Value)
+                        .WithDirectory(a.RawUrl)
+                        .WithSubdomain(page.Domain.Subdomain.Value)
+                        .WithCountry(page.Domain.Country.Value)
+                        .Create();
+                }
+            }
+
+            return filteredAnchors;
+        }
+
+        protected IList<Page> ApplyRule(HtmlNodeCollection anchors)
+        {
+            if (anchors == null) 
+                return new List<Page>();    
+
+            var filtredAnchors = anchors.ToList();
+            var pattern = ConfigsManager.Get("FormatUrl")?.Description;
+
+            if(pattern != null)
+            {
+                var regex = new Regex(pattern);
+                filtredAnchors = anchors.Where(a =>
+                {
+                    var result = regex.IsMatch(GetAnchorHref(a)) || !GetAnchorHref(a).StartsWith("http");
+                    return result;
+                }
+                ).ToList();
+            }
+
+            return ConvertAnchorsIntoPages(filtredAnchors);
         }
 
         protected IList<Page> ConvertAnchorsIntoPages(IList<HtmlNode> anchors)
@@ -62,7 +104,7 @@ namespace Crawlers.Infra.WebScrapperServices.Services
         public string? GetTitle(Page page)
         {
             var doc = GetDocument(page);
-            var title = doc.DocumentNode.SelectNodes("//head/title").First();
+            var title = doc.DocumentNode.SelectNodes("//head/title").FirstOrDefault();
             if(title == null)
                 return null;
 
@@ -117,6 +159,6 @@ namespace Crawlers.Infra.WebScrapperServices.Services
 
         public abstract string? GetContent(Page page);
 
-        public abstract T? GetEntity(Page page);
+        public abstract Article GetEntity(Page page);
     }
 }

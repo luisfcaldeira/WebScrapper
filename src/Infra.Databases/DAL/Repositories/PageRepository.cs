@@ -1,8 +1,11 @@
 ﻿using Crawlers.Domains.Entities.ObjectValues.Pages;
 using Crawlers.Domains.Interfaces.DAL.Repositories;
 using Crawlers.Infra.Databases.Context;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
+using System.Collections;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using System.Data;
 
 namespace Crawlers.Infra.Databases.DAL.Repositories
 {
@@ -20,11 +23,6 @@ namespace Crawlers.Infra.Databases.DAL.Repositories
         public IEnumerable<Page> GetAllNotVisited()
         {
             return GetAll().Where(url => !url.IsVisited && url.TaskCode == -1);
-        }
-
-        public Page? GetOneNotVisited()
-        {
-            return GetNonVisited(1).FirstOrDefault();
         }
 
         public bool Exists(Page page)
@@ -48,6 +46,7 @@ namespace Crawlers.Infra.Databases.DAL.Repositories
                               ,[ConcurrencyToken]
                               ,[TaskCode]
                           FROM [Crawlers].[Page]
+                          WHERE VISITED IS NULL
                           ORDER BY NEWID()");
 
         }
@@ -83,11 +82,62 @@ namespace Crawlers.Infra.Databases.DAL.Repositories
             {
                 DbContext.Database.ExecuteSqlRaw(query);
 
-            } catch(Exception e)
+            } catch(Exception)
             {
 
             }
 
+        }
+
+        public override void Update(Page entity)
+        {
+            var visited = "NULL";
+
+            if (entity.Visited != null)
+            {
+                var dateStr = entity.Visited.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                visited = $"'{dateStr}'";
+            }
+
+            var concurrencyToken = Convert.ToHexString(entity.ConcurrencyToken);
+            concurrencyToken = ConvertToSqlVarBinary(concurrencyToken);
+            
+            var query = @$"  
+                          UPDATE [Crawlers].[Page]
+                          SET [Domain_Protocol_Value] = '{entity.Domain.Protocol.Value}'
+                              ,[Domain_Subdomain_Value] = '{entity.Domain.Subdomain.Value}'
+                              ,[Domain_Name] = '{entity.Domain.Name}'
+                              ,[Domain_TopLevel] = '{entity.Domain.TopLevel}'
+                              ,[Domain_Country_Value] = '{entity.Domain.Country.Value}'
+                              ,[Domain_Directory_Value] = '{entity.Domain.Directory.Value}'
+                              ,[Created] = '{entity.Created}'
+                              ,[Visited] = {visited}
+                              ,[MessageErro] = '{entity.MessageErro?.Replace("'", "\"")}'
+                              ,[RawUrl] = '{entity.RawUrl}'
+                              ,[TaskCode] = '{entity.TaskCode}'
+                          WHERE ConcurrencyToken = {concurrencyToken}
+                          AND ID = '{entity.Id}'";
+
+            
+            var affectedRows = DbContext.Database.ExecuteSqlRaw(query);
+
+            if(affectedRows == 0)
+            {
+                throw new Exception("This page was taken by other task.");
+            }
+        }
+
+        private string ConvertToSqlVarBinary(string concurrencyToken)
+        {
+            var result = "";
+            var x = "x";
+            foreach(var c in concurrencyToken)
+            {
+                result += c + x;
+                x = "";
+            }
+
+            return result;
         }
 
         public void RemoveDuplicity()
@@ -112,6 +162,11 @@ namespace Crawlers.Infra.Databases.DAL.Repositories
                 trans.Commit();
             }
 
+        }
+
+        public IEnumerable<Page> GetNonVisitedRegisteredForTask(int taskCode)
+        {
+            return GetAll().Where(url => !url.IsVisited && url.TaskCode == taskCode);
         }
     }
 }

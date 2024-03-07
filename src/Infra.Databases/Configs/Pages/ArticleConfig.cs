@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Crawlers.Infra.Databases.Configs.Pages
 {
-    internal class ArticleConfig : IEntityTypeConfiguration<BaseArticle>
+    internal class ArticleConfig : IEntityTypeConfiguration<Article>
     {
-        public void Configure(EntityTypeBuilder<BaseArticle> builder)
+        public void Configure(EntityTypeBuilder<Article> builder)
         {
 
         }

@@ -8,15 +8,16 @@ using System.Threading.Tasks;
 
 namespace Crawlers.Application.Services.Async
 {
-    public class WebCrawlerFolhaAppAsyncService : IWebCrawlerFolhaAppAsyncService
+    public class WebCrawlerAppAsyncService : IWebCrawlerAppAsyncService
     {
-
-        private readonly IServiceProvider _provider;
+        private readonly IServiceProvider serviceProvider;
         private readonly int _threadCount;
+       
 
-        public WebCrawlerFolhaAppAsyncService(IServiceProvider provider, int threadCount)
+        public WebCrawlerAppAsyncService(IServiceProvider serviceProvider, int threadCount)
         {
-            _provider = provider;
+            
+            this.serviceProvider = serviceProvider;
             _threadCount = threadCount;
         }
 
@@ -33,7 +34,8 @@ namespace Crawlers.Application.Services.Async
 
                 tasks[i] = taskFactory.StartNew(() => {
                     var counter = new ThreadCounter();
-                    var service = _provider.GetService<IWebCrawlerFolhaAppService>();
+                    var service = serviceProvider.GetService<IWebCrawlerAppService>();
+                    
                     while(true)
                     {
                         service.Scrap(counter.Counter);
@@ -42,7 +44,7 @@ namespace Crawlers.Application.Services.Async
                 });
             }
 
-            Task.WaitAll(tasks);
+            Task.WaitAll(tasks, cancellationToken);
         }
     }
 }

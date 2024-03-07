@@ -1,9 +1,6 @@
-﻿using System;
-
-namespace Crawlers.Application.Interfaces.Services
+﻿namespace Crawlers.Application.Interfaces.Services
 {
-    public interface IWebCrawlerFolhaAppService : IDisposable
+    public interface IWebCrawlerFolhaAppService : IWebCrawlerAppService
     {
-        void Scrap(int taskCode);
     }
 }

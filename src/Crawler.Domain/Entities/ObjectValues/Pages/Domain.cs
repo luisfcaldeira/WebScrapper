@@ -39,7 +39,7 @@
 
         public override string? ToString()
         {
-            return FullUrl();
+            return $"{Protocol}{Subdomain}{Name}.{TopLevel}{Country}";
         }
 
     }

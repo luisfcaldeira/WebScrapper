@@ -18,31 +18,31 @@ namespace Tests.Crawler.Domains.Entities.ObjectValues
         public void TestIfCreateValidArticle()
         {
             var page1 = PageCreator.Create("http://domain.com");
-            var folha1 = new FolhaArticle(
+            var article1 = new Article(
                     "Lorem Ipsum", "Content", page1, DateTime.Today
                 );
 
-            Assert.IsTrue(folha1.IsValid);
+            Assert.IsTrue(article1.IsValid);
         }
 
         [TestMethod]
         public void TestIfCreateInvalidArticle()
         {
             var page1 = PageCreator.Create("http://domain.com");
-            var folha1 = new FolhaArticle(
+            var article1 = new Article(
                     string.Empty, string.Empty, page1, DateTime.Today
                 );
 
-            var folha2 = new FolhaArticle(
+            var article2 = new Article(
                     "Title", string.Empty, page1, DateTime.Today
                 );
 
-            var folha3 = new FolhaArticle(
+            var article3 = new Article(
                     string.Empty, "Content", page1, DateTime.Today
                 );
-            Assert.IsFalse(folha1.IsValid);
-            Assert.IsFalse(folha2.IsValid);
-            Assert.IsFalse(folha3.IsValid);
+            Assert.IsFalse(article1.IsValid);
+            Assert.IsFalse(article2.IsValid);
+            Assert.IsFalse(article3.IsValid);
         }
 
         [TestMethod]
@@ -56,24 +56,24 @@ namespace Tests.Crawler.Domains.Entities.ObjectValues
             page2.Id = 2;
             page3.Id = 2;
 
-            var folha1 = new FolhaArticle(
+            var article = new Article(
                     "Lorem Ipsum", "Content", page1, DateTime.Today
                 );
 
-            var folha2 = new FolhaArticle(
+            var article2 = new Article(
                     "Lorem Ipsum", "Content", page2, DateTime.Today
                 );
 
-            var folha3 = new FolhaArticle(
+            var article3 = new Article(
                     "Lorem Ipsum 1", "Content 123" , page3, DateTime.Today
                 );
 
-            folha1.Id = 1;
-            folha2.Id = 2;
-            folha3.Id = 3;
+            article.Id = 1;
+            article2.Id = 2;
+            article3.Id = 3;
 
-            Assert.AreEqual(folha1, folha2);
-            Assert.AreNotEqual(folha1, folha3);
+            Assert.AreEqual(article, article2);
+            Assert.AreNotEqual(article, article3);
         }
     }
 }

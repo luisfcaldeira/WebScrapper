@@ -1,7 +1,6 @@
 ﻿using Core.Infra.Services.Observers.Entities.Messages;
 using Core.Infra.Services.Observers.Interfaces;
 using Crawlers.Application.Interfaces.Services;
-using Crawlers.Domains.Entities.Articles;
 using Crawlers.Domains.Entities.ObjectValues.Pages;
 using Crawlers.Domains.Interfaces.DAL;
 using Crawlers.Domains.Interfaces.Services.WebCrawlerServices;
@@ -13,16 +12,16 @@ namespace Crawlers.Application.Services
 {
     public class WebCrawlerFolhaAppService : IWebCrawlerFolhaAppService
     {
-        public WebCrawlerFolhaAppService(IUnitOfWork unitOfWork, IFolhaWebCrawlerService folhaWebCrawlerService, IEventManager eventManager, int totalPackage)
+        public WebCrawlerFolhaAppService(IUnitOfWork unitOfWork, IWebCrawlerService WebCrawlerService, IEventManager eventManager, int totalPackage)
         {
             UnitOfWork = unitOfWork;
-            FolhaWebCrawlerService = folhaWebCrawlerService;
+            this.WebCrawlerService = WebCrawlerService;
             _eventManager = eventManager;
             _totalPackage = totalPackage;
         }
 
         private readonly IUnitOfWork UnitOfWork;
-        private readonly IFolhaWebCrawlerService FolhaWebCrawlerService;
+        private readonly IWebCrawlerService WebCrawlerService;
         private readonly IEventManager _eventManager;
         private readonly int _totalPackage;
 
@@ -36,14 +35,12 @@ namespace Crawlers.Application.Services
             var pages = UnitOfWork.PageRepository.GetNonVisited(_totalPackage).ToList();
             TakeThem(pages, taskCode);
 
-            foreach(var page in pages.Where(p => p.TaskCode == taskCode))
-            {
-                //_eventManager.Notify(new Message(Tag.Evolution, $"Working on the page: '{page}'..."));
 
-                if (page.TaskCode == taskCode)
-                {
-                    CreateAndSaveArticle(page, taskCode);
-                }
+            var pagesToVisit = UnitOfWork.PageRepository.GetNonVisitedRegisteredForTask(taskCode);
+
+            foreach (var page in pagesToVisit)
+            {
+                CreateAndSaveArticle(page, taskCode);
             }
 
             if(pages.Any())
@@ -57,10 +54,11 @@ namespace Crawlers.Application.Services
         {
             foreach (var page in pages)
             {
-                page.TaskCode = taskCode;
-                UnitOfWork.PageRepository.Update(page);
-                UnitOfWork.Save();
-                UnitOfWork.PageRepository.Detach(page);
+                try
+                {
+                    page.TaskCode = taskCode;
+                    UnitOfWork.PageRepository.Update(page);
+                } catch (Exception) { }
             }
             if(pages.Any())
             {
@@ -74,15 +72,15 @@ namespace Crawlers.Application.Services
             {
                 _eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - Accessing #{page.Id} url: '{page.RawUrl}' and getting referrals"));
 
-                var newPages = FolhaWebCrawlerService.GetReferralsPages(page);
-                InsertNewPages(taskCode, newPages);
+                var newPages = WebCrawlerService.GetReferralsPages(page);
+                InsertNewPages(newPages);
 
                 //_eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - Trying to convert into an article document "));
-                var folha = FolhaWebCrawlerService.GetEntity(page);
+                var article = WebCrawlerService.GetEntity(page);
 
-                UnitOfWork.FolhaArticleRepository.Add(folha);
+                UnitOfWork.FolhaArticleRepository.Add(article);
                 UnitOfWork.Save();
-                UnitOfWork.FolhaArticleRepository.Detach(folha);
+                UnitOfWork.FolhaArticleRepository.Detach(article);
 
             }
             catch (Exception ex)
@@ -93,14 +91,10 @@ namespace Crawlers.Application.Services
 
             page.Visit();
             UnitOfWork.PageRepository.Update(page);
-            UnitOfWork.Save();
-            UnitOfWork.PageRepository.Detach(page);
         }
 
-        private void InsertNewPages(int taskCode, IList<Page> newPages)
+        private void InsertNewPages(IList<Page> newPages)
         {
-            //_eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - Saving {newPages.Count} new pages "));
-
             foreach (var p in newPages)
             {
                 UnitOfWork.PageRepository.Insert(p);
@@ -112,7 +106,7 @@ namespace Crawlers.Application.Services
         public void Dispose()
         {
             UnitOfWork.Dispose();
-            FolhaWebCrawlerService.Dispose();
+            WebCrawlerService.Dispose();
             _eventManager.Dispose();
         }
     }

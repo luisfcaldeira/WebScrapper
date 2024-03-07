@@ -31,6 +31,7 @@ namespace Core.Infra.IoC
         private bool mockWebNavigator;
         private int totalThreads;
         private int totalPackage;
+        private string site;
 
         public IocMapper()
         {
@@ -48,6 +49,7 @@ namespace Core.Infra.IoC
                     mockWebNavigator = configurationRoot.GetValue<bool>("MockWebNavigator");
                     totalThreads = configurationRoot.GetValue<int>("TotalThreads");
                     totalPackage = configurationRoot.GetValue<int>("TotalPackage");
+                    site = configurationRoot.GetValue<string>("Site");
 
                 })
                 .ConfigureServices((_, services) =>
@@ -58,23 +60,37 @@ namespace Core.Infra.IoC
                     .AddDbContext<CrawlerDbContext>(provider =>
                         {
                             //provider.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=WebCrawler");
-                            provider.UseSqlServer(@"Server=DESKTOP-L0UN16O;Database=WebCrawler2;User Id=acatc2;Password=acatc2;");
+                            provider.UseSqlServer(@"Server=DESKTOP-L0UN16O;Database=WebCrawlerExame;User Id=acatc2;Password=acatc2;");
                         }, ServiceLifetime.Transient)
 
                     .AddTransient<IPageRepository, PageRepository>()
-                    .AddTransient<IWebCrawlerFolhaAppService, WebCrawlerFolhaAppService>((serviceProvider) =>
+                    
+                    .AddTransient<IWebCrawlerAppAsyncService>((serviceProvider) =>
                     {
-                        return new WebCrawlerFolhaAppService(serviceProvider.GetService<IUnitOfWork>(), serviceProvider.GetService<IFolhaWebCrawlerService>(), serviceProvider.GetService<IEventManager>(), totalPackage);
+                        return new WebCrawlerAppAsyncService(serviceProvider, totalThreads);
                     })
-                    .AddTransient<IWebCrawlerFolhaAppAsyncService>((serviceProvider) =>
-                    {
-                        return new WebCrawlerFolhaAppAsyncService(serviceProvider, totalThreads);
-                    })
-                    .AddTransient<IFolhaWebCrawlerService, FolhaWebCrawlerService>()
+                    
                     .AddTransient<HtmlWeb>()
                     .AddTransient<IUnitOfWork, UnitOfWork>()
                     .AddTransient<IEventManager, EventManager>()
-                    .AddSingleton<IConfigsManager, ConfigsManager>();
+                    .AddSingleton<IConfigsManager, ConfigsManager>()
+                    .AddTransient<IWebCrawlerAppService, WebCrawlerFolhaAppService>((serviceProvider) =>
+                    {
+                        return new WebCrawlerFolhaAppService(serviceProvider.GetService<IUnitOfWork>(), serviceProvider.GetService<IWebCrawlerService>(), serviceProvider.GetService<IEventManager>(), totalPackage);
+                    }); 
+
+                    switch(site)
+                    {
+                        case "Folha":
+                            services.AddTransient<IWebCrawlerService, FolhaWebCrawlerService>();
+                            break;
+                        case "Exame":
+                            services.AddTransient<IWebCrawlerService, ExameWebCrawlerService>();
+                            break;
+
+                        default:
+                            throw new Exception("Site option wasn't implemented");
+                    }
 
                     if(mockWebNavigator)
                     {

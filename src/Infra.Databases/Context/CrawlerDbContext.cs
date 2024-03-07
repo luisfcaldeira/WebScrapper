@@ -25,7 +25,7 @@ namespace Crawlers.Infra.Databases.Context
             
             modelBuilder.HasDefaultSchema(GetType().FullName.Split('.')[0]);
 
-            modelBuilder.Entity<FolhaArticle>();
+            modelBuilder.Entity<Article>();
 
             modelBuilder.ApplyConfiguration(new PageConfig());
             modelBuilder.ApplyConfiguration(new ArticleConfig());

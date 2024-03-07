@@ -12,7 +12,7 @@ namespace Crawlers.Infra.Databases.DAL
     {
         private bool disposed = false;
         private IPageRepository _pageRepository;
-        private IFolhaArticleRepository _folhaArticleRepository;
+        private IArticleRepository _articleRepository;
 
         public IPageRepository PageRepository 
         { 
@@ -25,14 +25,14 @@ namespace Crawlers.Infra.Databases.DAL
             }
         }
 
-        public IFolhaArticleRepository FolhaArticleRepository
+        public IArticleRepository FolhaArticleRepository
         {
             get
             {
-                if(_folhaArticleRepository == null)
-                    _folhaArticleRepository = new FolhaArticleRepository(DbContext);
+                if(_articleRepository == null)
+                    _articleRepository = new ArticleRepository(DbContext);
 
-                return _folhaArticleRepository;
+                return _articleRepository;
             }
         }
 

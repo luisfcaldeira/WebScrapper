@@ -18,7 +18,7 @@ namespace Core.Infra.CrossCutting.Services.Configs.Managers
             _configurations.Add(configuration); 
         }
 
-        public IConfiguration Get(string name)
+        public IConfiguration? Get(string name)
         {
             var results = _configurations.Where(c => c.Name.Equals(name));
 

@@ -10,10 +10,12 @@ namespace Crawlers.Domains.Entities.ObjectValues.Pages
             var withSubdomain = new WithSubdomainUrl();
             var withCountry = new WithCountryUrl();
             var withError = new NotWellFormedUrl();
+            var onlyDirectory = new OnlyDirectory();
 
             withCountry
                 .SetNext(withSubdomain)
                 .SetNext(twoElements)
+                .SetNext(onlyDirectory)
                 .SetNext(withError);
 
             var client = new UrlClient(withCountry);

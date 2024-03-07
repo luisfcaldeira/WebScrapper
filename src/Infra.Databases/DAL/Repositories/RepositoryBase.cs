@@ -55,15 +55,14 @@ namespace Crawlers.Infra.Databases.DAL.Repositories
             DbSet.Remove(entityToDelete);
         }
 
-        public void Update(T entity)
+        public virtual void Update(T entity)
         {
             try
             {
-
                 DbSet.Attach(entity);
             } catch(InvalidOperationException ex)
             {
-                if (!ex.Message.Contains("is already being tracked"))
+                if (!ex.Message.Contains("it is already being tracked"))
                     throw;
             }
             DbContext.Entry(entity).State = EntityState.Modified;

@@ -6,11 +6,10 @@ using Crawlers.Domains.Interfaces.Services.WebCrawlerServices;
 using Crawlers.Infra.WebScrapperServices.Interfaces.InnerServices;
 using HtmlAgilityPack;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace Crawlers.Infra.WebScrapperServices.Services
 {
-    public class FolhaWebCrawlerService : WebCrawlerService<FolhaArticle>, IFolhaWebCrawlerService
+    public class FolhaWebCrawlerService : WebCrawlerService, IFolhaWebCrawlerService
     {
         public FolhaWebCrawlerService(IWebNavigator webNavigator, IEventManager eventManager, IConfigsManager configsManager) : base(webNavigator, eventManager, configsManager)
         {
@@ -42,9 +41,9 @@ namespace Crawlers.Infra.WebScrapperServices.Services
             return DateTime.Parse(strDate);
         }
 
-        public override FolhaArticle? GetEntity(Page url)
+        public override Article GetEntity(Page page)
         {
-            return new FolhaArticle(GetTitle(url), GetContent(url), url, GetPublishDate(url));
+            return new Article(GetTitle(page), GetContent(page), page, GetPublishDate(page));
         }
 
         public override IList<Page> GetReferralsPages(Page page)
@@ -62,19 +61,6 @@ namespace Crawlers.Infra.WebScrapperServices.Services
             {
                 return ApplyRule(anchors);
             } 
-
-
-            return new List<Page>();
-        }
-
-        private IList<Page> ApplyRule(HtmlNodeCollection anchors)
-        {
-            var regex = new Regex(ConfigsManager.Get("FormatUrl").Description);
-            var filtredAnchors = anchors.Where(a => regex.IsMatch(GetAnchorHref(a)));
-            if (filtredAnchors != null && filtredAnchors.Count() > 0)
-            {
-                return ConvertAnchorsIntoPages(anchors);
-            }
 
             return new List<Page>();
         }

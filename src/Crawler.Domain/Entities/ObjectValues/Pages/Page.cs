@@ -9,7 +9,7 @@ namespace Crawlers.Domains.Entities.ObjectValues.Pages
         public Domain Domain { get; private set; } = new Domain();
         public DateTime Created { get; set; } = DateTime.Now;
         public DateTime? Visited { get; private set; } = null;
-        public ICollection<BaseArticle> Articles{ get; set; }
+        public ICollection<Article> Articles{ get; set; }
         public string? MessageErro { get; private set; }
         public string? RawUrl { get; internal set; }
         public ICollection<PageCollection> PagesCollections { get; set; }
@@ -36,7 +36,7 @@ namespace Crawlers.Domains.Entities.ObjectValues.Pages
 
         protected Page()
         {
-            Articles = new List<BaseArticle>();
+            Articles = new List<Article>();
             PagesCollections = new List<PageCollection>();
         }
 

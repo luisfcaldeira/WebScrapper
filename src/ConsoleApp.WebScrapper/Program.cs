@@ -15,7 +15,6 @@ namespace ConsoleApp.WebScrapper
     {
         public static void Main()
         {
-
             Console.WriteLine("Hello");
             Console.WriteLine("Collecting dependences");
 
@@ -26,7 +25,7 @@ namespace ConsoleApp.WebScrapper
             eventManager.Attach(new LogMessageEventListener());
             eventManager.Attach(new LogErrorEventListener());
 
-            var strUrl = "https://folha.uol.com.br";
+            var strUrl = "https://www.exame.com/";
 
             if (unitOfWork.PageRepository.GetPage(strUrl) == null)
             {
@@ -34,10 +33,11 @@ namespace ConsoleApp.WebScrapper
                 unitOfWork.Save();
             }
 
-            var crawler = iocMapper.Get<IWebCrawlerFolhaAppAsyncService>();
+            var crawler = iocMapper.Get<IWebCrawlerAppAsyncService>();
             var configsManager = iocMapper.Get<IConfigsManager>();
 
-            configsManager.Add(new FormatUrlConfiguration(@"^[htps]{4,5}.+\/20[1-2][0-9]\/\d{2}[\/0-9\-a-z]+\.shtml$"));
+            //configsManager.Add(new FormatUrlConfiguration(@"^[htps]{4,5}.+\/20[1-2][0-9]\/\d{2}[\/0-9\-a-z]+\.shtml$"));
+            configsManager.Add(new FormatUrlConfiguration(@"^[htps]{4,5}:\/\/[w\.]{0,4}exame\.com.+"));
 
             var cancellation = new CancellationTokenSource();
 

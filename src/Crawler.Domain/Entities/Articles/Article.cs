@@ -2,7 +2,7 @@
 
 namespace Crawlers.Domains.Entities.Articles
 {
-    public abstract class BaseArticle
+    public class Article
     {
         public int Id { get; set; }
         public string Title { get; protected set; } = string.Empty;
@@ -11,11 +11,11 @@ namespace Crawlers.Domains.Entities.Articles
         public DateTime? Published { get; protected set; } 
         public bool IsValid { get; private set; } = false;
 
-        protected BaseArticle()
+        protected Article()
         {
         }
 
-        protected BaseArticle(string title, string content, Page page, DateTime? published)
+        public Article(string title, string content, Page page, DateTime? published)
         {
             Title = title;
             Content = ClearContent(content);
@@ -56,7 +56,7 @@ namespace Crawlers.Domains.Entities.Articles
 
         public override bool Equals(object? obj)
         {
-            return obj is BaseArticle article &&
+            return obj is Article article &&
                    Url == article.Url;
         }
 

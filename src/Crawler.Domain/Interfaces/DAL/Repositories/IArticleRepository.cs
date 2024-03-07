@@ -3,9 +3,9 @@ using Crawlers.Domains.Entities.ObjectValues.Pages;
 
 namespace Crawlers.Domains.Interfaces.DAL.Repositories
 {
-    public interface IFolhaArticleRepository : IRepositoryBase<FolhaArticle>
+    public interface IArticleRepository : IRepositoryBase<Article>
     {
-        bool Exists(FolhaArticle folha);
-        FolhaArticle? GetArticle(Page page);
+        bool Exists(Article article);
+        Article GetArticle(Page page);
     }
 }

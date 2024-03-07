@@ -15,7 +15,7 @@ namespace ConsoleApp.Multithread.DbInteractions
             Task[] tasks = new Task[2];
             TaskFactory taskFactory = new TaskFactory();
 
-            tasks[0] = taskFactory.StartNew(async () =>
+            tasks[0] = taskFactory.StartNew(() =>
             {
                 foreach(var page in pageRepository.GetAll())
                 {
@@ -23,7 +23,7 @@ namespace ConsoleApp.Multithread.DbInteractions
                 }
             });
 
-            tasks[1] = taskFactory.StartNew(async () =>
+            tasks[1] = taskFactory.StartNew(() =>
             {
                 foreach (var page in pageRepository.GetAll())
                 {

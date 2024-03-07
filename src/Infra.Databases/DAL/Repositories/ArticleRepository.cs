@@ -5,20 +5,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Crawlers.Infra.Databases.DAL.Repositories
 {
-    internal class FolhaArticleRepository : RepositoryBase<FolhaArticle>, IFolhaArticleRepository
+    internal class ArticleRepository : RepositoryBase<Article>, IArticleRepository
     {
-        public FolhaArticleRepository(DbContext dbContext) : base(dbContext)
+        public ArticleRepository(DbContext dbContext) : base(dbContext)
         {
         }
 
-        public bool Exists(FolhaArticle folha)
+        public bool Exists(Article article)
         {
             return GetAll()
-                .Where(f => f.Equals(folha))
+                .Where(f => f.Equals(article))
                 .Any();
         }
 
-        public FolhaArticle? GetArticle(Page page)
+        public Article GetArticle(Page page)
         {
             return GetAll()
                 .Where(f => f.Url.Equals(page.RawUrl))
