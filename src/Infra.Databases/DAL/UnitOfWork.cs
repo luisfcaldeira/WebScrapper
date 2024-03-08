@@ -25,7 +25,7 @@ namespace Crawlers.Infra.Databases.DAL
             }
         }
 
-        public IArticleRepository FolhaArticleRepository
+        public IArticleRepository ArticleRepository
         {
             get
             {

@@ -16,7 +16,7 @@ namespace Crawlers.Infra.Databases.Configs.Pages
                 page.RawUrl
             ).IsUnique();  
 
-            builder.HasMany(page => page.Articles);
+
             builder.OwnsOne(page => page.Domain);
             builder.OwnsOne(page => page.Domain, domain =>
             {

@@ -5,7 +5,7 @@ namespace Crawlers.Domains.Interfaces.DAL
     public interface IUnitOfWork : IDisposable
     {
         IPageRepository PageRepository { get; }
-        IArticleRepository FolhaArticleRepository { get; }
+        IArticleRepository ArticleRepository { get; }
         void Save();
         public void DisableTracking();
         public void EnableTracking();

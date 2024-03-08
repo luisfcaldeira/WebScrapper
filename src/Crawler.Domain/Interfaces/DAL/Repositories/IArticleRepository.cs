@@ -6,6 +6,7 @@ namespace Crawlers.Domains.Interfaces.DAL.Repositories
     public interface IArticleRepository : IRepositoryBase<Article>
     {
         bool Exists(Article article);
+        void Insert(Article article);
         Article GetArticle(Page page);
     }
 }

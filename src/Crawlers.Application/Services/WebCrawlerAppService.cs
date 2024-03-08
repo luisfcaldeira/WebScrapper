@@ -78,9 +78,7 @@ namespace Crawlers.Application.Services
                 //_eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - Trying to convert into an article document "));
                 var article = WebCrawlerService.GetEntity(page);
 
-                UnitOfWork.FolhaArticleRepository.Add(article);
-                UnitOfWork.Save();
-                UnitOfWork.FolhaArticleRepository.Detach(article);
+                UnitOfWork.ArticleRepository.Insert(article);
 
             }
             catch (Exception ex)
@@ -98,8 +96,6 @@ namespace Crawlers.Application.Services
             foreach (var p in newPages)
             {
                 UnitOfWork.PageRepository.Insert(p);
-                UnitOfWork.Save();
-                UnitOfWork.PageRepository.Detach(p);
             }
         }
 
