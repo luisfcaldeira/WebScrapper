@@ -30,7 +30,7 @@ namespace Crawlers.Infra.WebScrapperServices.Services
                 result.Append(node.InnerText);  
             }
 
-            return Decode(result.ToString());
+            return Decode(result.ToString(), Encoding.GetEncoding(doc.Encoding.BodyName));
         }
 
         public DateTime? GetPublishDate(Page url)

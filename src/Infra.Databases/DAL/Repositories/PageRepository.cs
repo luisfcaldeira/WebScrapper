@@ -1,10 +1,7 @@
 ﻿using Crawlers.Domains.Entities.ObjectValues.Pages;
 using Crawlers.Domains.Interfaces.DAL.Repositories;
 using Crawlers.Infra.Databases.Context;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System.Collections;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using System.Data;
 
 namespace Crawlers.Infra.Databases.DAL.Repositories
@@ -126,7 +123,7 @@ namespace Crawlers.Infra.Databases.DAL.Repositories
                 throw new Exception("This page was taken by other task.");
             }
         }
-
+        
         private string ConvertToSqlVarBinary(string concurrencyToken)
         {
             var result = "";

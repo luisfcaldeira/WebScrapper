@@ -27,17 +27,10 @@ namespace Crawlers.Infra.WebScrapperServices.Services
 
             foreach (var node in nodes)
             {
-
-                Encoding iso = Encoding.GetEncoding("ISO-8859-1");
-                Encoding utf8 = Encoding.Latin1;
-                byte[] utfBytes = utf8.GetBytes(node.InnerText);
-                byte[] isoBytes = Encoding.Convert(utf8, iso, utfBytes);
-                string text = iso.GetString(isoBytes);
-
-                result.Append(text);
+                result.Append(node.InnerText);
             }
 
-            return Decode(result.ToString());
+            return Decode(result.ToString(), Encoding.GetEncoding(doc.Encoding.BodyName));
         }
 
         public override Article GetEntity(Page page)

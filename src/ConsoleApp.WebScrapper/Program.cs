@@ -25,6 +25,7 @@ namespace ConsoleApp.WebScrapper
             eventManager.Attach(new LogMessageEventListener());
             eventManager.Attach(new LogErrorEventListener());
 
+            //var strUrl = "https://www.folha.uol.com.br/";
             var strUrl = "https://www.exame.com/";
 
             if (unitOfWork.PageRepository.GetPage(strUrl) == null)

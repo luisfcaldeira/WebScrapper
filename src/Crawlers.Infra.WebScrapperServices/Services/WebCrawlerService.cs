@@ -110,12 +110,12 @@ namespace Crawlers.Infra.WebScrapperServices.Services
 
             // https://docs.microsoft.com/en-us/dotnet/api/system.text.encoding.getencodings?view=net-6.0#system-text-encoding-getencodings
             var titleStr = title.InnerText;
-            return Decode(titleStr);
+            return Decode(titleStr, Encoding.GetEncoding(doc.Encoding.BodyName));
         }
 
-        protected static string Decode(string titleStr)
+        protected static string Decode(string titleStr, Encoding srcEncoding)
         {
-            byte[] bytes = Encoding.GetEncoding("iso-8859-1").GetBytes(titleStr);
+            byte[] bytes = srcEncoding.GetBytes(titleStr);
             return Encoding.UTF8.GetString(bytes);
         }
 
