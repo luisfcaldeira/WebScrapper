@@ -1,4 +1,5 @@
-﻿using Core.Infra.Services.Observers.Entities.Messages;
+﻿using Core.Infra.Services.Observers;
+using Core.Infra.Services.Observers.Entities.Messages;
 using Core.Infra.Services.Observers.Interfaces;
 using Crawlers.Application.Interfaces.Services;
 using Crawlers.Domains.Entities.ObjectValues.Pages;
@@ -32,12 +33,15 @@ namespace Crawlers.Application.Services
 
         private void scrap(int taskCode)
         {
+            _eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - Getting non-visited websites"));
+
             var pages = UnitOfWork.PageRepository.GetNonVisited(_totalPackage).ToList();
             TakeThem(pages, taskCode);
 
-
+            _eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - Getting websites of #{taskCode} thread"));
             var pagesToVisit = UnitOfWork.PageRepository.GetNonVisitedRegisteredForTask(taskCode);
 
+            _eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - Iterating websites"));
             foreach (var page in pagesToVisit)
             {
                 CreateAndSaveArticle(page, taskCode);
@@ -52,6 +56,7 @@ namespace Crawlers.Application.Services
 
         private void TakeThem(List<Page> pages, int taskCode)
         {
+            _eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - Set owner for non-visited websites"));
             foreach (var page in pages)
             {
                 try
@@ -62,7 +67,7 @@ namespace Crawlers.Application.Services
             }
             if(pages.Any())
             {
-                //_eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - It was took {pages.Count} record(s) from DB."));
+                _eventManager.Notify(new Message(Tag.LogMessage, $"[{taskCode}] - It was took {pages.Count} record(s) from DB."));
             }
         }
 

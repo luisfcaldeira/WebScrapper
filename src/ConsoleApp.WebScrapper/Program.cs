@@ -20,6 +20,8 @@ namespace ConsoleApp.WebScrapper
 
             var iocMapper = new IocMapper();
 
+            Console.WriteLine("Loading dependences");
+
             var unitOfWork = iocMapper.Get<IUnitOfWork>();
             var eventManager = iocMapper.Get<IEventManager>();
             eventManager.Attach(new LogMessageEventListener());
@@ -28,15 +30,16 @@ namespace ConsoleApp.WebScrapper
             //var strUrl = "https://www.folha.uol.com.br/";
             var strUrl = "https://www.exame.com/";
 
-            if (unitOfWork.PageRepository.GetPage(strUrl) == null)
-            {
-                unitOfWork.PageRepository.Add(PageCreator.Create(strUrl));
-                unitOfWork.Save();
-            }
+            Console.WriteLine($"Loading website {strUrl}");
 
+            unitOfWork.PageRepository.Insert(PageCreator.Create(strUrl));
+
+            Console.WriteLine("Loading crawler");
             var crawler = iocMapper.Get<IWebCrawlerAppAsyncService>();
+            Console.WriteLine("Loading configurations");
             var configsManager = iocMapper.Get<IConfigsManager>();
 
+            Console.WriteLine("Seting configuration");
             //configsManager.Add(new FormatUrlConfiguration(@"^[htps]{4,5}.+\/20[1-2][0-9]\/\d{2}[\/0-9\-a-z]+\.shtml$"));
             configsManager.Add(new FormatUrlConfiguration(@"^[htps]{4,5}:\/\/[w\.]{0,4}exame\.com.+"));
 

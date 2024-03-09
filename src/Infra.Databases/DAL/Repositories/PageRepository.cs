@@ -163,7 +163,26 @@ namespace Crawlers.Infra.Databases.DAL.Repositories
 
         public IEnumerable<Page> GetNonVisitedRegisteredForTask(int taskCode)
         {
-            return GetAll().Where(url => !url.IsVisited && url.TaskCode == taskCode);
+            var result =  DbSet.FromSqlRaw(@$"SELECT [Id]
+                              ,[Domain_Protocol_Value]
+                              ,[Domain_Subdomain_Value]
+                              ,[Domain_Name]
+                              ,[Domain_TopLevel]
+                              ,[Domain_Country_Value]
+                              ,[Domain_Directory_Value]
+                              ,[Created]
+                              ,[Visited]
+                              ,[MessageErro]
+                              ,[RawUrl]
+                              ,[ConcurrencyToken]
+                              ,[TaskCode]
+                          FROM [Crawlers].[Page]
+                          WHERE VISITED IS NULL
+                            AND TaskCode = {taskCode}");
+
+            DbContext.Database.CloseConnection();
+
+            return result;
         }
     }
 }

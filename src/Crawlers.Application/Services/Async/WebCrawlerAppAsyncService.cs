@@ -34,6 +34,8 @@ namespace Crawlers.Application.Services.Async
 
                 tasks[i] = taskFactory.StartNew(() => {
                     var counter = new ThreadCounter();
+
+                    Console.WriteLine($"Loading WebCrawlerAppService #{counter.Counter}");
                     var service = serviceProvider.GetService<IWebCrawlerAppService>();
                     
                     while(true)
