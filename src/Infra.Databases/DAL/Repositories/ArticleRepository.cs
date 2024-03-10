@@ -29,7 +29,7 @@ namespace Crawlers.Infra.Databases.DAL.Repositories
                                    )
                              VALUES
                                    ('{article.Title.Replace("'", "''").Replace("\"", "\"\"")}'
-                                   ,'{article.Content.Replace("'", "''").Replace("\"", "\"\"")}'
+                                   ,'{article.Content.Replace("'", "''").Replace("\"", "\"\"").Replace("\n", " ")}'
                                    ,'{article.Url}'
                                    ,{publishDate}
                                    ,'{article.IsValid}'

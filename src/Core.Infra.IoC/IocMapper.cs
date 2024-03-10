@@ -59,8 +59,7 @@ namespace Core.Infra.IoC
                     services
                     .AddDbContext<CrawlerDbContext>(provider =>
                         {
-                            //provider.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=WebCrawler");
-                            provider.UseSqlServer(@"Server=DESKTOP-L0UN16O;Database=WebCrawlerExame;User Id=acatc2;Password=acatc2;MultipleActiveResultSets=True");
+                            provider.UseSqlServer(@"Server=DESKTOP-L0UN16O;Database=WebCrawlerExame2;User Id=acatc2;Password=acatc2;MultipleActiveResultSets=True");
                         }, ServiceLifetime.Transient)
 
                     .AddTransient<IPageRepository, PageRepository>()

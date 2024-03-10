@@ -62,7 +62,18 @@ namespace Crawlers.Application.Services
                 try
                 {
                     page.TaskCode = taskCode;
-                    UnitOfWork.PageRepository.Update(page);
+                    try
+                    {
+                        UnitOfWork.PageRepository.Update(page);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        if (!ex.Message.Contains("This page was taken by other task"))
+                        {
+                            throw;
+                        }
+                    }
                 } catch (Exception) { }
             }
             if(pages.Any())
@@ -93,7 +104,18 @@ namespace Crawlers.Application.Services
             }
 
             page.Visit();
-            UnitOfWork.PageRepository.Update(page);
+
+            try
+            {
+                UnitOfWork.PageRepository.Update(page);
+
+            } catch (Exception ex)
+            {
+                if(!ex.Message.Contains("This page was taken by other task"))
+                {
+                    throw;
+                }
+            }
         }
 
         private void InsertNewPages(IList<Page> newPages)
