@@ -39,7 +39,7 @@ namespace Crawlers.Infra.WebScrapperServices.Services
                 if(!a.RawUrl.StartsWith("http"))
                 {
                     filteredAnchors[i] = PageBuilder.With(page.Domain.Name, page.Domain.TopLevel)
-                        .WithUrl(page.Url + "/" + a.RawUrl)
+                        .WithUrl(page.Domain.ToString() + "/" + a.RawUrl)
                         .WithProtocol(page.Domain.Protocol.Value)
                         .WithDirectory(a.RawUrl)
                         .WithSubdomain(page.Domain.Subdomain.Value)
